@@ -19,7 +19,7 @@ export default async function page() {
           src={"/icons/logo-full.svg"}
           alt="Ulka"
           width={200}
-          height={200}
+          height={68}
         />
         <div className="mt-6">
           <p>The calendar for the `Universe`</p>
