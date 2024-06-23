@@ -1,3 +1,9 @@
+import UlkaCalendar from "@/components/calendar";
+
 export default async function page() {
-  return <div>World calendar page</div>;
+  return (
+    <div>
+      <UlkaCalendar />
+    </div>
+  );
 }
