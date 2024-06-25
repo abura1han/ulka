@@ -82,3 +82,43 @@ export function getWeekDayNames(): string[] {
   ];
   return dayNames;
 }
+
+export function getCurrentWeek(
+  year: number,
+  month: number,
+  date: number
+): DayInfo[] {
+  const days: DayInfo[] = [];
+  const currentDate = moment(`${year}-${month}-${date}`);
+
+  // Find the start of the week (Sunday)
+  const startOfWeek = currentDate.clone().startOf("week");
+
+  // Collect all days of the current week
+  for (let i = 0; i < 7; i++) {
+    const weekDate = startOfWeek.clone().add(i, "day");
+    days.push({
+      date: weekDate.format("YYYY-MM-DD"),
+      dayName: weekDate.format("dddd"),
+      active: true,
+    });
+  }
+
+  return days;
+}
+
+export function getTimesWithAmPm(timeGap: number = 1): string[] {
+  const times: string[] = [];
+  let currentTime = moment("12:00 AM", "hh:mm A");
+
+  while (currentTime.format("hh:mm A") !== "12:00 AM" || times.length === 0) {
+    times.push(currentTime.format("hh:mm A"));
+    currentTime.add(timeGap, "hours");
+  }
+
+  return times;
+}
+
+export const checkIsToday = (date: string) => {
+  return date === moment().format("YYYY-MM-DD");
+};
