@@ -3,6 +3,7 @@
 import { CalendarData } from "@/app/types/calendar";
 import { cn } from "@/lib/utils";
 import {
+  DATE_FORMAT,
   DayInfo,
   checkIsToday,
   getCurrentWeek,
@@ -32,10 +33,6 @@ const UlkaCalendar = ({
   const calendarData = unpack(uint8Array) as CalendarData[];
 
   // Calendar views
-  const [calViews, setCalViews] = useState<"day" | "week" | "month" | "year">(
-    "day"
-  );
-
   const [springs, api] = useSpring(() => ({
     from: {
       x: 0,
@@ -49,13 +46,6 @@ const UlkaCalendar = ({
   }));
 
   const handleClick = async () => {
-    setCalViews((ps) => {
-      if (ps === "year") return "month";
-      if (ps === "month") return "week";
-
-      return "day";
-    });
-
     await api.start({
       from: {
         scale: 1,
@@ -77,12 +67,7 @@ const UlkaCalendar = ({
       className={cn("p-4", containerClassName)}
       style={{ ...springs }}
     >
-      {calViews === "year" && <CalYearView onClick={handleClick} />}
-      {calViews === "month" && <CalMonthView onClick={handleClick} />}
-      {calViews === "week" && <CalWeekView onClick={handleClick} />}
-      {calViews === "day" && (
-        <CalDayView onClick={handleClick} calendarData={calendarData} />
-      )}
+      <CalDayView onClick={handleClick} calendarData={calendarData} />
     </animated.div>
   );
 };
@@ -258,25 +243,36 @@ const CalDayView = ({
 }) => {
   const router = useRouter();
   const search = useSearchParams();
+  const locationDate = search.get("date");
 
-  const currentYear = moment().year();
-  const currentMonth = moment().month() + 1; // moment().month() returns 0-based month index
-  const currentDate = moment().date();
+  const momentDate = moment(
+    locationDate || undefined,
+    locationDate ? DATE_FORMAT : undefined
+  );
+
+  const selectedDate = momentDate.format(DATE_FORMAT);
+
+  const currentYear = momentDate.year();
+  const currentMonth = momentDate.month() + 1; // moment().month() returns 0-based month index
+  const currentDate = momentDate.date();
   const currentWeek = getCurrentWeek(currentYear, currentMonth, currentDate);
   const times = getTimesWithAmPm();
   const eventSlotWidth = 260;
 
   const today = useMemo(() => {
-    return currentWeek.filter((day) => checkIsToday(day.date));
+    return currentWeek.find((day) => checkIsToday(day.date));
   }, [currentWeek]);
 
-  const data = useMemo(() => {
-    // if (!today.length) return [];
-
+  /**
+   * Group calendar data
+   */
+  const filteredCalData = useMemo(() => {
     const filterData = calendarData.filter((cal) => {
-      if (cal.startsAt[0] !== today[0].date) return false;
+      // if (cal.startsAt[0] !== today?.date) return false;
+      if (cal.startsAt[0] === selectedDate) return true;
+      if (cal.endsAt[0] === selectedDate) return true;
 
-      return true;
+      return false;
     });
 
     const result = {} as Record<string, CalendarData[]>;
@@ -284,19 +280,19 @@ const CalDayView = ({
     // Group results by hour
     times.forEach((hour) => {
       result[hour] = filterData.filter((cal) => {
-        const [calHour, calMinuteWithMeridium] = cal.startsAt[1].split(":");
-        const [timeHour, timeMinuteWithMeridium] = hour.split(":");
-        const [calMinute, calMaridium] = calMinuteWithMeridium.split(" ");
-        const [timeMinute, timeMaridium] = timeMinuteWithMeridium.split(" ");
+        const [calHour, calMinuteWithMeridiem] = cal.startsAt[1].split(":");
+        const [timeHour, timeMinuteWithMeridiem] = hour.split(":");
+        const [calMinute, calMeridiem] = calMinuteWithMeridiem.split(" ");
+        const [timeMinute, timeMeridiem] = timeMinuteWithMeridiem.split(" ");
 
-        if (calHour === timeHour && calMaridium === timeMaridium) return true;
+        if (calHour === timeHour && calMeridiem === timeMeridiem) return true;
 
         return false;
       });
     });
 
     return result;
-  }, [calendarData, times, today]);
+  }, [calendarData, selectedDate, times]);
 
   useEffect(() => {
     const selectedEventId = search.get("event");
@@ -313,42 +309,28 @@ const CalDayView = ({
     <div className="flex h-[92vh]">
       {/* Calendar view */}
       <div className="flex-1 grid grid-cols-1 text-sm text-blue-800 font-medium text-center max-h-full overflow-auto">
-        {today?.map((day, index) => (
-          <div key={day.date + day.dayName} className="flex flex-col">
-            {/* Day name in week loop */}
-            <div>{day.dayName.slice(0, 3)}</div>
+        {today && (
+          <div className="flex flex-col">
             <div
               className={cn(
                 "flex flex-1 flex-col justify-start mt-2 border-r relative",
-                index === 0 && "border-l"
+                "border-l"
               )}
             >
-              {/* Date in week loop */}
-              <div className="border-b w-full h-max flex justify-center pb-3">
-                <span
-                  className={cn(
-                    "size-8 rounded-full bg-gray-100 flex items-center justify-center",
-                    checkIsToday(day.date) && "bg-blue-200 font-bold"
-                  )}
-                >
-                  {day.date.split("-").at(-1)}
-                </span>
-              </div>
-
               {/* Time slots in day loop */}
               <div className="flex-1 hover:bg-gray-0 text-xs flex flex-col justify-between gap-6">
-                {Object.keys(data).map((time) => {
-                  const items = data[time];
+                {Object.keys(filteredCalData).map((time, index) => {
+                  const items = filteredCalData[time];
 
                   return (
                     <div
-                      key={time}
+                      key={time + index}
                       className="w-full h-full flex relative hover:bg-indigo-50 min-h-[500px] overflow-auto"
                     >
                       <TimeBoundary time={time} eventCount={items.length} />
 
                       {/* Time indicator */}
-                      {checkIsToday(day.date) && (
+                      {checkIsToday(today.date) && (
                         <CalTimeIndicator
                           slotTime={time}
                           className="w-[98%] left-5 bg-green-800 before:bg-green-800"
@@ -426,7 +408,7 @@ const CalDayView = ({
               </div>
             </div>
           </div>
-        ))}
+        )}
       </div>
     </div>
   );
@@ -463,9 +445,9 @@ const DayBlockInMonthView = ({
 }) => {
   const currentYear = moment().year();
   const currentMonth = moment().month() + 1;
-  const today = moment().format("D/MM/YY");
+  const today = moment().format(DATE_FORMAT);
   const weekDays = getWeekDayNames();
-  const days = getDaysByYearAndMonth(currentYear, currentMonth, "D/MM/YY");
+  const days = getDaysByYearAndMonth(currentYear, currentMonth, DATE_FORMAT);
 
   return (
     <div>

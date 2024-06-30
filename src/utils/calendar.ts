@@ -1,5 +1,7 @@
 import moment from "moment";
 
+export const DATE_FORMAT = "D/M/YYYY";
+
 export function getMonths(): string[] {
   const months: string[] = [
     "January",
@@ -99,7 +101,7 @@ export function getCurrentWeek(
   for (let i = 0; i < 7; i++) {
     const weekDate = startOfWeek.clone().add(i, "day");
     days.push({
-      date: weekDate.format("YYYY-MM-DD"),
+      date: weekDate.format(DATE_FORMAT),
       dayName: weekDate.format("dddd"),
       active: true,
     });
@@ -121,5 +123,5 @@ export function getTimesWithAmPm(timeGap: number = 1): string[] {
 }
 
 export const checkIsToday = (date: string) => {
-  return date === moment().format("YYYY-MM-DD");
+  return date === moment().format(DATE_FORMAT);
 };

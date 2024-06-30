@@ -1,4 +1,5 @@
 import { CalendarData } from "@/app/types/calendar";
+import { DATE_FORMAT } from "@/utils/calendar";
 import moment from "moment";
 
 export const avatarUrl =
@@ -9,8 +10,8 @@ export const coverImageUrl =
 export const calendarData = [
   {
     id: "s_sssdxedff",
-    startsAt: [moment().format("yy-MM-DD"), "08:10 PM"],
-    endsAt: [moment().format("yy-MM-DD"), "10:00 PM"],
+    startsAt: [moment().format(DATE_FORMAT), "08:10 PM"],
+    endsAt: [moment().format(DATE_FORMAT), "10:00 PM"],
     logo: avatarUrl,
     coverImage: coverImageUrl,
     title: "Space Hub - Rewind solar system",
@@ -24,8 +25,8 @@ export const calendarData = [
   },
   {
     id: "s_sssdxed233v",
-    startsAt: [moment().format("yy-MM-DD"), "10:00 PM"],
-    endsAt: [moment().format("yy-MM-DD"), "10:30 PM"],
+    startsAt: [moment().format(DATE_FORMAT), "10:00 PM"],
+    endsAt: [moment().format(DATE_FORMAT), "10:30 PM"],
     logo: avatarUrl,
     coverImage: coverImageUrl,
     title: "Space Hub - Rewind solar system",
@@ -40,8 +41,8 @@ export const calendarData = [
   },
   {
     id: "s_sssddf2ff",
-    startsAt: [moment().format("yy-MM-DD"), "10:00 PM"],
-    endsAt: [moment().format("yy-MM-DD"), "10:30 PM"],
+    startsAt: [moment().format(DATE_FORMAT), "10:00 PM"],
+    endsAt: [moment().format(DATE_FORMAT), "10:30 PM"],
     logo: avatarUrl,
     coverImage: coverImageUrl,
     title: "Space Hub - Rewind solar system",
@@ -55,8 +56,8 @@ export const calendarData = [
   },
   {
     id: "s_sssdxedffr",
-    startsAt: [moment().format("yy-MM-DD"), "10:00 PM"],
-    endsAt: [moment().format("yy-MM-DD"), "10:30 PM"],
+    startsAt: [moment().format(DATE_FORMAT), "10:00 PM"],
+    endsAt: [moment().format(DATE_FORMAT), "10:30 PM"],
     logo: avatarUrl,
     coverImage: coverImageUrl,
     title: "Space Hub - Rewind solar system",
@@ -70,8 +71,8 @@ export const calendarData = [
   },
   {
     id: "s_sssdxed233",
-    startsAt: [moment().format("yy-MM-DD"), "10:00 PM"],
-    endsAt: [moment().format("yy-MM-DD"), "10:00 PM"],
+    startsAt: [moment().format(DATE_FORMAT), "10:00 PM"],
+    endsAt: [moment().format(DATE_FORMAT), "10:00 PM"],
     logo: avatarUrl,
     coverImage: coverImageUrl,
     title: "Space Hub - Rewind solar system",
@@ -85,8 +86,8 @@ export const calendarData = [
   },
   {
     id: "s_sssddf2ffj",
-    startsAt: [moment().format("yy-MM-DD"), "10:00 PM"],
-    endsAt: [moment().format("yy-MM-DD"), "10:00 PM"],
+    startsAt: [moment().format(DATE_FORMAT), "10:00 PM"],
+    endsAt: [moment().format(DATE_FORMAT), "10:00 PM"],
     logo: avatarUrl,
     coverImage: coverImageUrl,
     title: "Space Hub - Rewind solar system",
