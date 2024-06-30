@@ -4,6 +4,8 @@ import { calendarData } from "@/data";
 import Image from "next/image";
 import Link from "next/link";
 
+export const dynamic = "force-dynamic";
+
 const Page = async ({
   searchParams,
 }: {

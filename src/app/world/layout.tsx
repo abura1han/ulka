@@ -3,7 +3,7 @@ import SessionWrapper from "@/components/SessionWrapper";
 import WorldHeader from "@/components/headers/WorldHeader";
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
-import React from "react";
+import React, { Suspense } from "react";
 import "../globals.css";
 
 const inter = Inter({ subsets: ["latin"] });
@@ -15,12 +15,12 @@ export const metadata: Metadata = {
 
 export default function RootLayout({
   children,
-  "details-panel": detailsPanel,
-  "providers-panel": providersPanel,
+  detailsPanel,
+  providersPanel,
 }: Readonly<{
   children: React.ReactNode;
-  "details-panel": React.ReactNode;
-  "providers-panel": React.ReactNode;
+  detailsPanel: React.ReactNode;
+  providersPanel: React.ReactNode;
 }>) {
   return (
     <html lang="en">
@@ -33,7 +33,15 @@ export default function RootLayout({
               <div className="flex-1 flex justify-center bg-indigo-100">
                 {children}
               </div>
-              {detailsPanel}
+              <Suspense
+                fallback={
+                  <>
+                    <div>Loading...</div>
+                  </>
+                }
+              >
+                {detailsPanel}
+              </Suspense>
             </div>
           </SessionWrapper>
         </ReactQueryClientProvider>
