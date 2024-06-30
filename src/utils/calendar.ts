@@ -27,7 +27,8 @@ export interface DayInfo {
 
 export function getDaysByYearAndMonth(
   currentYear: number,
-  currentMonth: number
+  currentMonth: number,
+  dateFormat: string = "D"
 ): DayInfo[] {
   const days: DayInfo[] = [];
   const startDate = moment(`${currentYear}-${currentMonth}-01`);
@@ -38,7 +39,7 @@ export function getDaysByYearAndMonth(
   for (let i = startDayOfWeek; i > 0; i--) {
     const prevDate = startDate.clone().subtract(i, "day");
     days.push({
-      date: prevDate.format("D"),
+      date: prevDate.format(dateFormat),
       dayName: prevDate.format("dddd"),
       active: false,
     });
@@ -48,7 +49,7 @@ export function getDaysByYearAndMonth(
   let currentDate = startDate.clone();
   while (currentDate.isSameOrBefore(endDate, "day")) {
     const dayInfo: DayInfo = {
-      date: currentDate.format("D"),
+      date: currentDate.format(dateFormat),
       dayName: currentDate.format("dddd"),
       active: true,
     };
@@ -61,7 +62,7 @@ export function getDaysByYearAndMonth(
   for (let i = 1; i <= 6 - endDayOfWeek; i++) {
     const nextDate = endDate.clone().add(i, "day");
     days.push({
-      date: nextDate.format("D"),
+      date: nextDate.format(dateFormat),
       dayName: nextDate.format("dddd"),
       active: false,
     });

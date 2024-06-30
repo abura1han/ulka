@@ -10,7 +10,7 @@ import { Avatar, AvatarFallback } from "../ui/avatar";
 
 export default function WorldHeader() {
   return (
-    <header className="flex items-center justify-between px-6 py-4 bg-white sticky top-0 left-0 w-full shadow-sm gap-4">
+    <header className="flex items-center justify-between px-4 py-3 bg-white sticky top-0 left-0 w-full shadow-sm gap-4">
       <SiteBranding />
       <DateModifier />
       <UserProfile />
