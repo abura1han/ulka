@@ -1,9 +1,9 @@
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
-const Page = () => {
+const Page = async () => {
   return (
-    <div className="w-52 px-2 relative">
+    <div className="w-52 px-2 relative bg-white">
       <Tabs
         defaultValue="people"
         className="w-full max-h-full py-4 overflow-auto"

@@ -4,18 +4,19 @@ import { calendarData } from "@/data";
 import Image from "next/image";
 import Link from "next/link";
 
-const avatarUrl =
-  "https://images.pexels.com/photos/771742/pexels-photo-771742.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1";
-
-const Page = ({ searchParams }: { searchParams: Record<string, string> }) => {
+const Page = async ({
+  searchParams,
+}: {
+  searchParams: Record<string, string>;
+}) => {
   if (!Object.keys(searchParams).length) {
-    return null;
+    return <></>;
   }
 
   const data = calendarData.find((item) => item.id === searchParams.event);
 
   if (!data) {
-    return null;
+    return <></>;
   }
 
   return (
@@ -53,7 +54,7 @@ const Page = ({ searchParams }: { searchParams: Record<string, string> }) => {
       <div className="mt-3">
         <div className="font-bold text-blue-800 text-sm mb-2">Creator</div>
         <div className="flex gap-2">
-          <Image src={avatarUrl} width={50} height={50} alt="Avatar url" />
+          <Image src={data.logo} width={50} height={50} alt="Avatar url" />
           <div className="text-sm">
             <Link
               href={"/"}
