@@ -49,7 +49,7 @@ const UlkaCalendar = ({
 
   return (
     <animated.div
-      className={cn("p-4", containerClassName)}
+      className={cn("", containerClassName)}
       style={{ ...springs }}
     >
       <CalDayView onClick={handleClick} calendarData={calendarData} />

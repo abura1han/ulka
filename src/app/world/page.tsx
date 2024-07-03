@@ -1,6 +1,6 @@
 import UlkaCalendar from "@/components/calendar";
 import { calendarData } from "@/data";
-import { DATE_FORMAT } from "@/utils/calendar";
+import { DATE_FORMAT, getTimesWithAmPm } from "@/utils/calendar";
 import moment from "moment";
 import { encode } from "msgpackr";
 
@@ -22,14 +22,5 @@ export default async function page({
 
   const serializedAsBuffer = encode(filteredCalData);
 
-  return (
-    <div className="w-full">
-      <div className="w-full">
-        <UlkaCalendar
-          containerClassName="w-full"
-          calData={serializedAsBuffer}
-        />
-      </div>
-    </div>
-  );
+  return <UlkaCalendar calData={serializedAsBuffer} containerClassName="w-max" />;
 }

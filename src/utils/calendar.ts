@@ -115,7 +115,7 @@ export function getTimesWithAmPm(timeGap: number = 1): string[] {
   let currentTime = moment("12:00 AM", "hh:mm A");
 
   while (currentTime.format("hh:mm A") !== "12:00 AM" || times.length === 0) {
-    times.push(currentTime.format("hh:mm A"));
+    times.push(currentTime.format("h:mm A"));
     currentTime.add(timeGap, "hours");
   }
 

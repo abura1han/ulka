@@ -41,7 +41,7 @@ export const calendarData = [
   },
   {
     id: "s_sssddf2ff",
-    startsAt: [moment().format(DATE_FORMAT), "10:00 PM"],
+    startsAt: [moment().format(DATE_FORMAT), "10:20 PM"],
     endsAt: [moment().format(DATE_FORMAT), "10:30 PM"],
     logo: avatarUrl,
     coverImage: coverImageUrl,
@@ -56,8 +56,8 @@ export const calendarData = [
   },
   {
     id: "s_sssdxedffr",
-    startsAt: [moment().format(DATE_FORMAT), "10:00 PM"],
-    endsAt: [moment().format(DATE_FORMAT), "10:30 PM"],
+    startsAt: [moment().format(DATE_FORMAT), "11:00 PM"],
+    endsAt: [moment().format(DATE_FORMAT), "11:30 PM"],
     logo: avatarUrl,
     coverImage: coverImageUrl,
     title: "Space Hub - Rewind solar system",
@@ -71,8 +71,8 @@ export const calendarData = [
   },
   {
     id: "s_sssdxed233",
-    startsAt: [moment().format(DATE_FORMAT), "10:00 PM"],
-    endsAt: [moment().format(DATE_FORMAT), "10:00 PM"],
+    startsAt: [moment().format(DATE_FORMAT), "10:40 PM"],
+    endsAt: [moment().format(DATE_FORMAT), "11:00 PM"],
     logo: avatarUrl,
     coverImage: coverImageUrl,
     title: "Space Hub - Rewind solar system",
@@ -86,8 +86,8 @@ export const calendarData = [
   },
   {
     id: "s_sssddf2ffj",
-    startsAt: [moment().format(DATE_FORMAT), "10:00 PM"],
-    endsAt: [moment().format(DATE_FORMAT), "10:00 PM"],
+    startsAt: [moment().format(DATE_FORMAT), "10:10 PM"],
+    endsAt: [moment().format(DATE_FORMAT), "10:40 PM"],
     logo: avatarUrl,
     coverImage: coverImageUrl,
     title: "Space Hub - Rewind solar system",
@@ -99,4 +99,21 @@ export const calendarData = [
     _version: 1,
     public: 1,
   },
+  ...Array(100)
+    .fill(1)
+    .map((item, index) => ({
+      id: "s_sssddf2ffj" + index,
+      startsAt: [moment().format(DATE_FORMAT), "10:10 PM"],
+      endsAt: [moment().format(DATE_FORMAT), "10:40 PM"],
+      logo: avatarUrl,
+      coverImage: coverImageUrl,
+      title: "Space Hub - Rewind solar system",
+      description: "Some description",
+      attachments: [],
+      createdAt: "",
+      updatedAt: "",
+      createdBy: "",
+      _version: 1,
+      public: 1,
+    })),
 ] as CalendarData[];

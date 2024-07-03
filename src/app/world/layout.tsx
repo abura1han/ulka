@@ -5,6 +5,8 @@ import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import React, { Suspense } from "react";
 import "../globals.css";
+import { getTimesWithAmPm } from "@/utils/calendar";
+import { cn } from "@/lib/utils";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -27,21 +29,22 @@ export default function RootLayout({
       <body className={inter.className}>
         <ReactQueryClientProvider>
           <SessionWrapper>
-            <WorldHeader />
-            <div className="flex justify-between h-[calc(100vh-64px)] bg-gray-100">
-              {providersPanel}
-              <div className="flex-1 flex justify-center bg-indigo-100">
-                {children}
+            <div className="w-full h-screen overflow-hidden">
+              <WorldHeader />
+              <div className="w-screen h-full flex pt-[64px]">
+                <div className="w-full overflow-auto bg-indigo-100">
+                  {children}
+                </div>
+                <Suspense
+                  fallback={
+                    <>
+                      <div>Loading...</div>
+                    </>
+                  }
+                >
+                  {detailsPanel}
+                </Suspense>
               </div>
-              <Suspense
-                fallback={
-                  <>
-                    <div>Loading...</div>
-                  </>
-                }
-              >
-                {detailsPanel}
-              </Suspense>
             </div>
           </SessionWrapper>
         </ReactQueryClientProvider>
@@ -49,3 +52,18 @@ export default function RootLayout({
     </html>
   );
 }
+
+const HoursRow = () => {
+  return (
+    <div className="sticky top-0 text-xs flex flex-row justify-between py-2 w-max border-b bg-gray-50">
+      {getTimesWithAmPm().map((time, index) => (
+        <div
+          key={time + index}
+          className={cn("min-w-[130px] font-bold", !index && "pl-4")}
+        >
+          {time}
+        </div>
+      ))}
+    </div>
+  );
+};

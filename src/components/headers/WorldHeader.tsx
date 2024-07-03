@@ -11,7 +11,7 @@ import { DATE_FORMAT } from "@/utils/calendar";
 
 export default function WorldHeader() {
   return (
-    <header className="flex items-center justify-between px-4 py-3 bg-white sticky top-0 left-0 w-full shadow-sm gap-4">
+    <header className="flex items-center justify-between px-4 py-3 bg-white fixed top-0 left-0 w-full shadow-sm gap-4 z-10">
       <SiteBranding />
       <DateModifier />
       <UserProfile />

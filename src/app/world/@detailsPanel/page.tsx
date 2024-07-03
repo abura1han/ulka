@@ -22,7 +22,7 @@ const Page = async ({
   }
 
   return (
-    <div className="w-96 bg-white pt-3 pr-4">
+    <div className="w-[460px] md:w-[560px] bg-white pt-3 pr-4 pl-4 shadow-xl border-l">
       <DetailsPanelHeader />
 
       <div className="mt-3">
