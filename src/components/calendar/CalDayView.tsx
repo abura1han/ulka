@@ -96,7 +96,14 @@ const CalDayView = ({
           const itemData = filteredCalData[hourlyData];
 
           return (
-            <div key={hourlyData + index} className="border-l border-gray-100 hover:bg-blue-50">
+            <div
+              key={hourlyData + index}
+              className={cn(
+                "border-l border-gray-100 hover:bg-blue-50 relative",
+                itemData.length && "w-[300px]",
+                itemData.length > 5 && "w-[420px]"
+              )}
+            >
               <div
                 className={cn(
                   "min-w-[130px] font-bold mb-6 border-b border-gray-300 sticky top-0 left-0 z-50 bg-white",
@@ -112,40 +119,49 @@ const CalDayView = ({
                     key={item.id + itemIndex}
                     data-event-id={item.id}
                     className={cn(
-                      "min-h-0 border-2 py-1 px-2 rounded-md bg-white",
-                      search.get("event") === item.id && "border-blue-800",
-                      "w-[400px] mt-1 hover:border-black/70 z-10 relative"
+                      "absolute min-h-0 border-2 rounded-full bg-white group",
+                      "size-[40px] mt-1 hover:border-black/70 z-10 relative"
                     )}
                     style={{
                       // width: eventSlotWidth,
                       // top: `${item.startsAt[1].split(":")[1].split(" ")[0]}%`,
                       // left: eventSlotWidth * (index + 1) + 10 * index,
-                      marginLeft: `${
+                      marginLeft: `calc(${
                         item.startsAt[1].split(":")[1].split(" ")[0]
-                      }%`,
+                      }%)`,
                     }}
                     onClick={() => {
                       router.push(`?event=${item.id}`);
                     }}
                   >
-                    <div className="flex gap-2">
-                      <div className="size-[30px] relative rounded-full overflow-hidden">
-                        <Image
-                          src={item.logo}
-                          width={30}
-                          height={30}
-                          alt="User avatar"
-                          className="object-cover"
-                        />
-                      </div>
-                      <div className="text-sm font-medium text-left text-gray-900">
-                        {item.title}
-                        <div className="w-full text-left mt-1 flex items-center gap-1 text-gray-600">
-                          <TimerIcon size={16} />
-                          <div>{item.startsAt[1]}</div>
-                          <div>-</div>
-                          <div>{item.endsAt[1]}</div>
-                        </div>
+                    <div
+                      className={cn(
+                        "!size-[38px] relative rounded-full overflow-hidden",
+                        search.get("event") === item.id && "border-blue-800"
+                      )}
+                    >
+                      <Image
+                        src={item.logo}
+                        width={30}
+                        height={30}
+                        alt="User avatar"
+                        className="object-cover size-[38px]"
+                      />
+                    </div>
+                    <div
+                      className={cn(
+                        "text-sm font-medium text-left text-gray-900 absolute bottom-0  bg-white  group-hover:block w-[300px] px-3 py-2 rounded-sm shadow-lg",
+                        itemIndex + 1 === itemData.length
+                          ? "right-full"
+                          : "left-full"
+                      )}
+                    >
+                      {item.title}
+                      <div className="w-full text-left mt-1 flex items-center gap-1 text-gray-600">
+                        <TimerIcon size={16} />
+                        <div>{item.startsAt[1]}</div>
+                        <div>-</div>
+                        <div>{item.endsAt[1]}</div>
                       </div>
                     </div>
                     {/* <div className="w-full text-left mt-4 flex items-center gap-1 text-gray-600">
