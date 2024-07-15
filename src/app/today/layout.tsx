@@ -7,6 +7,7 @@ import React, { Suspense } from "react";
 import "../globals.css";
 import { getTimesWithAmPm } from "@/utils/calendar";
 import { cn } from "@/lib/utils";
+import MainFooter from "@/components/footer/MainFooter";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -29,23 +30,9 @@ export default function RootLayout({
       <body className={inter.className}>
         <ReactQueryClientProvider>
           <SessionWrapper>
-            <div className="w-full h-screen overflow-hidden">
-              <WorldHeader />
-              <div className="w-screen h-full flex pt-[64px]">
-                <div className="w-full overflow-auto bg-indigo-100">
-                  {children}
-                </div>
-                <Suspense
-                  fallback={
-                    <>
-                      <div>Loading...</div>
-                    </>
-                  }
-                >
-                  {detailsPanel}
-                </Suspense>
-              </div>
-            </div>
+            <WorldHeader />
+            <div className="w-full bg-gray-50 py-10">{children}</div>
+            <MainFooter />
           </SessionWrapper>
         </ReactQueryClientProvider>
       </body>

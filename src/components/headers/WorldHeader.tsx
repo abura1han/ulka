@@ -1,20 +1,38 @@
 "use client";
 
 import { cn } from "@/lib/utils";
+import { DATE_FORMAT } from "@/utils/calendar";
 import { ChevronLeftIcon, ChevronRightIcon } from "lucide-react";
 import moment from "moment";
 import Image from "next/image";
-import { useRouter, useSearchParams } from "next/navigation";
+import Link from "next/link";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { Avatar, AvatarFallback } from "../ui/avatar";
 import { Button } from "../ui/button";
-import { DATE_FORMAT } from "@/utils/calendar";
+
+const navLinks = [
+  {
+    label: "Today",
+    link: "/today",
+  },
+  {
+    label: "Explore",
+    link: "/explore",
+  },
+  {
+    label: "Profiles",
+    link: "/profiles",
+  },
+];
 
 export default function WorldHeader() {
   return (
-    <header className="flex items-center justify-between px-4 py-3 bg-white fixed top-0 left-0 w-full shadow-sm gap-4 z-10">
-      <SiteBranding />
-      <DateModifier />
-      <UserProfile />
+    <header className="bg-white sticky top-0 shadow-sm gap-4 z-10">
+      <div className="flex items-center justify-between px-4 py-3 w-full max-w-7xl mx-auto">
+        <SiteBranding />
+        <NavBar />
+        <UserProfile />
+      </div>
     </header>
   );
 }
@@ -27,6 +45,27 @@ const SiteBranding = () => {
         preview
       </div>
     </section>
+  );
+};
+
+const NavBar = () => {
+  const pathname = usePathname();
+
+  return (
+    <nav>
+      <ul className="flex items-center justify-center gap-5 text-sm font-medium">
+        {navLinks.map((link) => (
+          <li key={link.label}>
+            <Link
+              href={link.link}
+              className={cn(pathname === link.link && "font-bold")}
+            >
+              {link.label}
+            </Link>
+          </li>
+        ))}
+      </ul>
+    </nav>
   );
 };
 
@@ -126,7 +165,7 @@ const DateModifier = () => {
 
 const UserProfile = () => {
   return (
-    <section>
+    <section className="flex gap-3">
       <Avatar>
         <AvatarFallback>AR.</AvatarFallback>
       </Avatar>
