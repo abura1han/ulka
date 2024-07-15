@@ -25,7 +25,7 @@ export default async function page() {
           <p>The calendar for the `Universe`</p>
         </div>
         <div className="mt-20">
-          <Link href={"/world"} className="p-4 border border-black">
+          <Link href={"/today"} className="p-4 border border-black">
             View the world calendar
           </Link>
         </div>

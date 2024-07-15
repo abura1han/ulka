@@ -12,4 +12,5 @@ export interface CalendarData {
   createdBy: string;
   _version: number;
   public: number;
+  tags: string[]
 }
