@@ -1,13 +1,13 @@
 import { ReactQueryClientProvider } from "@/components/ReactQueryClientProvider";
 import SessionWrapper from "@/components/SessionWrapper";
+import MainFooter from "@/components/footer/MainFooter";
 import WorldHeader from "@/components/headers/WorldHeader";
+import { cn } from "@/lib/utils";
+import { getTimesWithAmPm } from "@/utils/calendar";
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
-import React, { Suspense } from "react";
+import React from "react";
 import "../globals.css";
-import { getTimesWithAmPm } from "@/utils/calendar";
-import { cn } from "@/lib/utils";
-import MainFooter from "@/components/footer/MainFooter";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -18,12 +18,8 @@ export const metadata: Metadata = {
 
 export default function RootLayout({
   children,
-  detailsPanel,
-  providersPanel,
 }: Readonly<{
   children: React.ReactNode;
-  detailsPanel: React.ReactNode;
-  providersPanel: React.ReactNode;
 }>) {
   return (
     <html lang="en">
