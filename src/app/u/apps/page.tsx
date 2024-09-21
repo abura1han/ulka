@@ -31,7 +31,7 @@ export default function Page({}) {
         {appList.map((app) => (
           <Link
             key={app.id}
-            href={`/dashboard/app/${app.id}`}
+            href={`/u/apps/${app.id}`}
             className="block px-1 py-2 border-b hover:bg-primary hover:text-white"
           >
             <div>{app.name}</div>
@@ -42,3 +42,4 @@ export default function Page({}) {
     </div>
   );
 }
+

@@ -1,5 +1,6 @@
 "use client";
 
+import { createApp } from "@/actions/app";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -18,10 +19,24 @@ import {
   DrawerTitle,
 } from "@/components/ui/drawer";
 import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 import { cn } from "@/lib/utils";
 import { useStore } from "@/store";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useMutation } from "@tanstack/react-query";
 import { useMediaQuery } from "@uidotdev/usehooks";
+import { useRouter } from "next/navigation";
+import { useForm } from "react-hook-form";
+import { toast } from "sonner";
+import { z } from "zod";
+import {
+  Form,
+  FormControl,
+  FormDescription,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "../ui/form";
 
 const modalTitle = "Create a new app";
 const modalDescription =
@@ -66,19 +81,83 @@ export function CreateAppModal() {
   );
 }
 
+const formSchema = z.object({
+  appName: z
+    .string()
+    .min(1, {
+      message: "App name must be provided",
+    })
+    .max(20, { message: "App name can not be more than 20 character long" }),
+});
+
 function CreateAppForm({ className }: React.ComponentProps<"form">) {
+  const router = useRouter();
+  const form = useForm<z.infer<typeof formSchema>>({
+    resolver: zodResolver(formSchema),
+    defaultValues: {
+      appName: "",
+    },
+  });
+
+  const createAppMutation = useMutation({
+    mutationFn: ({ appName }: { appName: string }) => createApp({ appName }),
+  });
+
+  async function onSubmit(values: z.infer<typeof formSchema>) {
+    if (!values.appName?.trim()) {
+      form.setError("appName", { message: "App name can not be empty" });
+      return;
+    }
+
+    try {
+      const { appId } = await createAppMutation.mutateAsync({
+        appName: values.appName,
+      });
+      router.push(`/dashboard/${appId}`);
+    } catch (error) {
+      console.log(error);
+      toast("Operation failed", {
+        // @ts-expect-error don't want to set the typing for error object
+        description: error.message,
+        action: {
+          label: "Okay",
+          onClick: () => {},
+        },
+      });
+    }
+  }
+
   return (
-    <form className={cn("grid items-start gap-4", className)}>
-      <div className="grid gap-2">
-        <Label htmlFor="app-name">App name</Label>
-        <Input type="text" id="app-name" defaultValue="" />
-      </div>
-      <div className="grid gap-2">
-        <Label htmlFor="domain">App domain</Label>
-        <Input id="domain" defaultValue="" />
-      </div>
-      <Button type="submit">Submit</Button>
-    </form>
+    <Form {...form}>
+      <form
+        className={cn("grid items-start gap-4", className)}
+        onSubmit={form.handleSubmit(onSubmit)}
+      >
+        <FormField
+          control={form.control}
+          name="appName"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>App name</FormLabel>
+              <FormControl>
+                <Input
+                  placeholder="Ex. Retro gallery"
+                  {...field}
+                  disabled={createAppMutation.isPending}
+                />
+              </FormControl>
+              <FormDescription>
+                This name will be displayed to public
+              </FormDescription>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <Button type="submit" disabled={createAppMutation.isPending}>
+          Submit
+        </Button>
+      </form>
+    </Form>
   );
 }
 
