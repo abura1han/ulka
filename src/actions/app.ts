@@ -78,8 +78,6 @@ export const updateAppById = async (
   if (customScheme !== undefined) updateData.customScheme = customScheme;
   if (packageName !== undefined) updateData.packageName = packageName;
 
-  console.log(updateData, appId);
-
   // Only proceed with the update if there are fields to update
   if (Object.keys(updateData).length > 0) {
     const [updatedApp] = await db
@@ -105,5 +103,30 @@ export const updateAppById = async (
     }
 
     return { success: true, ...existingApp };
+  }
+};
+
+interface GetAppData {
+  success: true | false;
+  error?: string;
+  data?: SelectApp;
+}
+
+export const getAppDataById = async (appId: string): Promise<GetAppData> => {
+  try {
+    const [appData] = await db
+      .select()
+      .from(appsTable)
+      .where(eq(appsTable.id, appId));
+
+    if (!appData) {
+      return { success: false, error: "App not found" };
+    }
+
+    return { success: true, data: appData };
+  } catch (error) {
+    console.log(error);
+
+    return { success: false, error: "Something went wrong" };
   }
 };
