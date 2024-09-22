@@ -4,17 +4,20 @@ import {
   CreateAppModal,
 } from "@/components/dashboard/CreateAppModal";
 import Header from "@/components/dashboard/Header";
+import { db } from "@/db";
+import { appsTable } from "@/db/schema";
+import { auth } from "@clerk/nextjs/server";
 import Link from "next/link";
 
-const appList = [
-  { id: crypto.randomUUID(), name: "App name 1", domain: "app.app.app" },
-  { id: crypto.randomUUID(), name: "App name 2", domain: "app.app.app" },
-  { id: crypto.randomUUID(), name: "App name 3", domain: "app.app.app" },
-  { id: crypto.randomUUID(), name: "App name 4", domain: "app.app.app" },
-  { id: crypto.randomUUID(), name: "App name 5", domain: "app.app.app" },
-];
+export default async function Page({}) {
+  const { userId } = auth();
+  if (!userId) {
+    return null;
+  }
 
-export default function Page({}) {
+  // Get all apps
+  const apps = await db.select().from(appsTable);
+
   return (
     <div>
       <Header />
@@ -28,18 +31,17 @@ export default function Page({}) {
       </div>
 
       <div className="container mx-auto px-4 mt-4 space-">
-        {appList.map((app) => (
+        {apps.map((app) => (
           <Link
             key={app.id}
             href={`/u/apps/${app.id}`}
             className="block px-1 py-2 border-b hover:bg-primary hover:text-white"
           >
-            <div>{app.name}</div>
-            <div className="text-sm">{app.domain}</div>
+            <div>{app.title}</div>
+            <div className="text-sm">{app.createdAt}</div>
           </Link>
         ))}
       </div>
     </div>
   );
 }
-

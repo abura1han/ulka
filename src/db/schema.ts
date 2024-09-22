@@ -1,21 +1,12 @@
 import { sql } from "drizzle-orm";
 import { integer, sqliteTable, text } from "drizzle-orm/sqlite-core";
 
-// Users Table
-export const usersTable = sqliteTable("users", {
-  id: integer("id").primaryKey(),
-  name: text("name").notNull(),
-  email: text("email").unique().notNull(),
-});
-
 // Apps Table
 export const appsTable = sqliteTable("apps", {
-  id: integer("id").primaryKey(),
-  title: text("title").notNull(), // Changed 'name' to 'title' for clarity
+  id: text("id", { length: 191 }).primaryKey().default(crypto.randomUUID()),
+  title: text("title").notNull(),
   content: text("content").notNull(),
-  userId: integer("user_id")
-    .notNull()
-    .references(() => usersTable.id, { onDelete: "cascade" }),
+  userId: text("user_id").notNull(), // Clerk User ID
   packageName: text("package_name").notNull(), // Android package name
   appId: text("app_id"), // iOS App ID
   customScheme: text("custom_scheme").notNull(), // Custom URL scheme
@@ -29,8 +20,8 @@ export const appsTable = sqliteTable("apps", {
 
 // App Store URLs Table
 export const appStoreUrlsTable = sqliteTable("app_store_urls", {
-  id: integer("id").primaryKey(),
-  appId: integer("app_id")
+  id: text("id", { length: 191 }).primaryKey().default(crypto.randomUUID()),
+  appId: text("app_id")
     .notNull()
     .references(() => appsTable.id, { onDelete: "cascade" }),
   platform: text("platform").notNull(), // 'android', 'ios', or 'third-party'
@@ -42,8 +33,8 @@ export const appStoreUrlsTable = sqliteTable("app_store_urls", {
 
 // Redirect Settings Table
 export const redirectSettingsTable = sqliteTable("redirect_settings", {
-  id: integer("id").primaryKey(),
-  appId: integer("app_id")
+  id: text("id", { length: 191 }).primaryKey().default(crypto.randomUUID()),
+  appId: text("app_id")
     .notNull()
     .references(() => appsTable.id, { onDelete: "cascade" }),
   fallbackUrl: text("fallback_url"), // URL to redirect to if app is not installed
@@ -59,8 +50,8 @@ export const redirectSettingsTable = sqliteTable("redirect_settings", {
 
 // Tracking and Analytics Table
 export const analyticsTable = sqliteTable("analytics", {
-  id: integer("id").primaryKey(),
-  appId: integer("app_id")
+  id: text("id", { length: 191 }).primaryKey().default(crypto.randomUUID()),
+  appId: text("app_id")
     .notNull()
     .references(() => appsTable.id, { onDelete: "cascade" }),
   eventType: text("event_type").notNull(), // 'click', 'install', 'open'
@@ -69,9 +60,6 @@ export const analyticsTable = sqliteTable("analytics", {
     .default(sql`(CURRENT_TIMESTAMP)`)
     .notNull(),
 });
-
-export type InsertUser = typeof usersTable.$inferInsert;
-export type SelectUser = typeof usersTable.$inferSelect;
 
 export type InsertApp = typeof appsTable.$inferInsert;
 export type SelectApp = typeof appsTable.$inferSelect;

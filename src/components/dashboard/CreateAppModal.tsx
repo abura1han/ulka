@@ -100,7 +100,19 @@ function CreateAppForm({ className }: React.ComponentProps<"form">) {
   });
 
   const createAppMutation = useMutation({
-    mutationFn: ({ appName }: { appName: string }) => createApp({ appName }),
+    mutationFn: ({
+      appName,
+      appId,
+      content,
+      customScheme,
+      packageName,
+    }: {
+      appName: string;
+      content: string;
+      customScheme: string;
+      packageName: string;
+      appId: string;
+    }) => createApp({ appName, appId, content, customScheme, packageName }),
   });
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
@@ -110,10 +122,21 @@ function CreateAppForm({ className }: React.ComponentProps<"form">) {
     }
 
     try {
-      const { appId } = await createAppMutation.mutateAsync({
+      const app = await createAppMutation.mutateAsync({
         appName: values.appName,
+        appId: "",
+        content: "",
+        customScheme: "",
+        packageName: "",
       });
-      router.push(`/dashboard/${appId}`);
+      if (!app.success) {
+        throw new Error(app.error);
+      }
+
+      toast("New app created", {
+        className: "text-green-500",
+      });
+      router.push(`/u/apps/${app.appId}`);
     } catch (error) {
       console.log(error);
       toast("Operation failed", {
@@ -123,6 +146,7 @@ function CreateAppForm({ className }: React.ComponentProps<"form">) {
           label: "Okay",
           onClick: () => {},
         },
+        className: "text-destructive",
       });
     }
   }

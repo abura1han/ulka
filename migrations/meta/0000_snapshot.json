@@ -1,7 +1,7 @@
 {
   "version": "6",
   "dialect": "sqlite",
-  "id": "a4161abf-f672-49c0-83b0-a179f3e72d9d",
+  "id": "f7b8cbe7-3185-4bc3-ad7f-916aba046c79",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "tables": {
     "analytics": {
@@ -9,14 +9,15 @@
       "columns": {
         "id": {
           "name": "id",
-          "type": "integer",
+          "type": "text(191)",
           "primaryKey": true,
           "notNull": true,
-          "autoincrement": false
+          "autoincrement": false,
+          "default": "'f8f1615b-e75a-48a4-8028-32c2808b5e08'"
         },
         "app_id": {
           "name": "app_id",
-          "type": "integer",
+          "type": "text",
           "primaryKey": false,
           "notNull": true,
           "autoincrement": false
@@ -68,14 +69,15 @@
       "columns": {
         "id": {
           "name": "id",
-          "type": "integer",
+          "type": "text(191)",
           "primaryKey": true,
           "notNull": true,
-          "autoincrement": false
+          "autoincrement": false,
+          "default": "'61d30ae6-9c9b-4f49-8d19-a41863958883'"
         },
         "app_id": {
           "name": "app_id",
-          "type": "integer",
+          "type": "text",
           "primaryKey": false,
           "notNull": true,
           "autoincrement": false
@@ -127,10 +129,11 @@
       "columns": {
         "id": {
           "name": "id",
-          "type": "integer",
+          "type": "text(191)",
           "primaryKey": true,
           "notNull": true,
-          "autoincrement": false
+          "autoincrement": false,
+          "default": "'965851d9-d291-42ee-aadb-09886bca6351'"
         },
         "title": {
           "name": "title",
@@ -148,7 +151,7 @@
         },
         "user_id": {
           "name": "user_id",
-          "type": "integer",
+          "type": "text",
           "primaryKey": false,
           "notNull": true,
           "autoincrement": false
@@ -191,21 +194,7 @@
         }
       },
       "indexes": {},
-      "foreignKeys": {
-        "apps_user_id_users_id_fk": {
-          "name": "apps_user_id_users_id_fk",
-          "tableFrom": "apps",
-          "tableTo": "users",
-          "columnsFrom": [
-            "user_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
-          "onDelete": "cascade",
-          "onUpdate": "no action"
-        }
-      },
+      "foreignKeys": {},
       "compositePrimaryKeys": {},
       "uniqueConstraints": {}
     },
@@ -214,14 +203,15 @@
       "columns": {
         "id": {
           "name": "id",
-          "type": "integer",
+          "type": "text(191)",
           "primaryKey": true,
           "notNull": true,
-          "autoincrement": false
+          "autoincrement": false,
+          "default": "'ef4e2f04-6c40-488a-b151-1182389c8e8e'"
         },
         "app_id": {
           "name": "app_id",
-          "type": "integer",
+          "type": "text",
           "primaryKey": false,
           "notNull": true,
           "autoincrement": false
@@ -281,44 +271,6 @@
           "onUpdate": "no action"
         }
       },
-      "compositePrimaryKeys": {},
-      "uniqueConstraints": {}
-    },
-    "users": {
-      "name": "users",
-      "columns": {
-        "id": {
-          "name": "id",
-          "type": "integer",
-          "primaryKey": true,
-          "notNull": true,
-          "autoincrement": false
-        },
-        "name": {
-          "name": "name",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
-        },
-        "email": {
-          "name": "email",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
-        }
-      },
-      "indexes": {
-        "users_email_unique": {
-          "name": "users_email_unique",
-          "columns": [
-            "email"
-          ],
-          "isUnique": true
-        }
-      },
-      "foreignKeys": {},
       "compositePrimaryKeys": {},
       "uniqueConstraints": {}
     }
