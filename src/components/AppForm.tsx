@@ -1,5 +1,6 @@
 "use client";
-import { createApp, updateAppById } from "@/actions/app";
+
+import { updateAppById } from "@/actions/app";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import {
@@ -13,100 +14,76 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-import { SelectApp } from "@/db/schema";
+import { InsertApp, SelectApp } from "@/db/schema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation } from "@tanstack/react-query";
 import { Download, ExternalLink, Smartphone } from "lucide-react";
-import { useParams } from "next/navigation";
-import { useState } from "react";
+import { useParams, useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import * as z from "zod";
 
 const formSchema = z.object({
-  title: z.string().min(1, { message: "Title is required" }),
-  content: z.string().min(1, { message: "Content is required" }),
-  packageName: z.string().min(1, { message: "Package name is required" }),
-  appId: z.string().optional(),
-  customScheme: z.string().min(1, { message: "Custom scheme is required" }),
+  title: z.string().min(1, { message: "App name is required" }),
+  content: z.string().min(1, { message: "Description is required" }),
+  packageName: z.string().optional(),
+  iosAppId: z.string().optional(),
+  customScheme: z
+    .string()
+    .min(1, { message: "Custom scheme is required" })
+    .regex(/^[a-z][a-z0-9+.-]*:$/, {
+      message: "Custom scheme must start with a letter and end with a colon",
+    }),
+  fallbackUrl: z.string().url({ message: "Invalid fallback URL" }),
 });
 
-export default function CreateAppForm({
+export default function AppForm({
   initialData,
+  operationMode,
 }: {
   initialData?: SelectApp;
+  operationMode: "create" | "update";
 }) {
   const { appId } = useParams() as { appId: string };
+  const router = useRouter();
+  const [previewData, setPreviewData] = useState<Partial<SelectApp> | null>(
+    initialData || null
+  );
 
-  // Form submit mutation
-  const submitFormMutation = useMutation({
-    mutationFn: ({
-      appName,
-      appId,
-      content,
-      customScheme,
-      packageName,
-      operation,
-      updateAppId,
-    }: {
-      appName: string;
-      content: string;
-      customScheme: string;
-      packageName: string;
-      appId: string;
-      updateAppId: string;
-      operation: "create" | "update";
-    }) =>
-      operation === "create"
-        ? createApp({ appName, appId, content, customScheme, packageName })
-        : updateAppById(updateAppId, {
-            appName,
-            content,
-            customScheme,
-            packageName,
-          }),
-  });
-
-  const [previewData] = useState({
-    title: "Your App",
-    customScheme: "yourapp://",
-    packageName: "com.yourapp",
-    appId: "",
-  });
-
-  const form = useForm<z.infer<typeof formSchema>>({
+  const form = useForm({
     resolver: zodResolver(formSchema),
-    defaultValues: {
-      title: initialData?.title,
-      content: initialData?.content,
-      packageName: initialData?.packageName,
-      appId: initialData?.appId || "",
-      customScheme: initialData?.customScheme,
+    defaultValues: initialData || {
+      title: "",
+      content: "",
+      packageName: "",
+      iosAppId: "",
+      customScheme: "",
+      fallbackUrl: "",
     },
   });
 
-  async function onSubmit(values: z.infer<typeof formSchema>) {
-    try {
-      const data = await submitFormMutation.mutateAsync({
-        updateAppId: appId,
-        operation: appId === "create" ? "create" : "update",
-        appId: values.appId || "",
-        appName: values.title,
-        content: values.content,
-        customScheme: values.customScheme,
-        packageName: values.packageName,
-      });
+  const formMutation = useMutation({
+    mutationFn: (data: InsertApp) => updateAppById(appId, data),
+    onSuccess: () => {
+      toast.success("App updated successfully");
+      router.push("/apps");
+    },
+    onError: (error) => {
+      toast.error("Failed to update app", { description: error.message });
+    },
+  });
 
-      if (!data.success) {
-        throw new Error(data.error);
-      }
+  const onSubmit = (data: InsertApp) => {
+    formMutation.mutate(data);
+  };
 
-      toast("Operation success", { description: "" });
-    } catch (error) {
-      // @ts-expect-error skipping type
-      toast("Operation failed", { description: error.message });
-    }
-  }
+  useEffect(() => {
+    const subscription = form.watch((value) => {
+      setPreviewData(value);
+    });
+    return () => subscription.unsubscribe();
+  }, [form.watch]);
 
   return (
     <div className="flex gap-8 container max-w-[1000px] mx-auto mt-10">
@@ -131,7 +108,7 @@ export default function CreateAppForm({
               name="content"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Description</FormLabel>
+                  <FormLabel>Description *</FormLabel>
                   <FormControl>
                     <Textarea
                       placeholder="Enter description/some content"
@@ -142,32 +119,42 @@ export default function CreateAppForm({
                 </FormItem>
               )}
             />
-
             <FormField
               control={form.control}
               name="packageName"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Package Name *</FormLabel>
+                  <FormLabel>Package Name</FormLabel>
                   <FormControl>
-                    <Input placeholder="Android package name" {...field} />
+                    <Input
+                      placeholder="com.example.app"
+                      {...field}
+                      value={field.value || ""}
+                    />
                   </FormControl>
+                  <FormDescription>
+                    The unique identifier for your Android app
+                  </FormDescription>
                   <FormMessage />
                 </FormItem>
               )}
             />
             <FormField
               control={form.control}
-              name="appId"
+              name="iosAppId"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>App ID</FormLabel>
-                  <FormDescription>
-                    If you have your app on app store then you can add
-                  </FormDescription>
+                  <FormLabel>iOS App ID</FormLabel>
                   <FormControl>
-                    <Input placeholder="iOS App ID (optional)" {...field} />
+                    <Input
+                      placeholder="123456789"
+                      {...field}
+                      value={field.value || ""}
+                    />
                   </FormControl>
+                  <FormDescription>
+                    The App Store ID for your iOS app (if applicable)
+                  </FormDescription>
                   <FormMessage />
                 </FormItem>
               )}
@@ -177,20 +164,45 @@ export default function CreateAppForm({
               name="customScheme"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Custom Scheme</FormLabel>
-                  <FormDescription>
-                    The deeplinking scheme for your app. Example:{" "}
-                    <code className="bg-gray-100 p-1 rounded">ulka://</code>
-                  </FormDescription>
+                  <FormLabel>Custom Scheme *</FormLabel>
                   <FormControl>
-                    <Input placeholder="Custom URL scheme" {...field} />
+                    <Input placeholder="yourapp://" {...field} />
                   </FormControl>
+                  <FormDescription>
+                    The deep linking scheme for your app (e.g., yourapp://)
+                  </FormDescription>
                   <FormMessage />
                 </FormItem>
               )}
             />
-            <Button type="submit" className="w-full">
-              Submit
+            <FormField
+              control={form.control}
+              name="fallbackUrl"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Fallback URL *</FormLabel>
+                  <FormControl>
+                    <Input placeholder="https://yourapp.com" {...field} />
+                  </FormControl>
+                  <FormDescription>
+                    The website to open if the app isn{"'"}t installed
+                  </FormDescription>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <Button
+              type="submit"
+              className="w-full"
+              disabled={formMutation.isPending}
+            >
+              {operationMode === "create"
+                ? formMutation.isPending
+                  ? "Creating..."
+                  : "Create App"
+                : formMutation.isPending
+                ? "Updating..."
+                : "Update App"}
             </Button>
           </form>
         </Form>
@@ -201,21 +213,26 @@ export default function CreateAppForm({
             <CardTitle>Deep Link Preview</CardTitle>
           </CardHeader>
           <CardContent>
-            <h3 className="text-lg font-semibold mb-4">{previewData.title}</h3>
+            <h3 className="text-lg font-semibold mb-4">
+              {previewData?.title || "Your App"}
+            </h3>
             <p className="mb-4">
               Your deep link:{" "}
               <code className="bg-gray-100 p-1 rounded">
                 https://ulka.dev/
-                {previewData.title.toLowerCase().replace(/\s+/g, "-")}
+                {(previewData?.title || "your-app")
+                  .toLowerCase()
+                  .replace(/\s+/g, "-")}
               </code>
             </p>
             <div className="space-y-4">
               <div className="flex items-center">
                 <Smartphone className="mr-2" />
                 <span>
-                  If app is installed: Opens {previewData.title} using{" "}
+                  If app is installed: Opens {previewData?.title || "Your App"}{" "}
+                  using{" "}
                   <code className="bg-gray-100 p-1 rounded">
-                    {previewData.customScheme}
+                    {previewData?.customScheme || "yourapp://"}
                   </code>
                 </span>
               </div>
@@ -226,14 +243,15 @@ export default function CreateAppForm({
                   <li>
                     Android:{" "}
                     <code className="bg-gray-100 p-1 rounded">
-                      market://details?id={previewData.packageName}
+                      market://details?id=
+                      {previewData?.packageName || "com.yourapp"}
                     </code>
                   </li>
-                  {previewData.appId && (
+                  {previewData?.iosAppId && (
                     <li>
                       iOS:{" "}
                       <code className="bg-gray-100 p-1 rounded">
-                        https://apps.apple.com/app/id{previewData.appId}
+                        https://apps.apple.com/app/id{previewData?.iosAppId}
                       </code>
                     </li>
                   )}
@@ -244,7 +262,7 @@ export default function CreateAppForm({
                 <span>
                   Fallback URL:{" "}
                   <code className="bg-gray-100 p-1 rounded">
-                    https://{previewData.packageName}
+                    {previewData?.fallbackUrl || "https://yourapp.com"}
                   </code>
                 </span>
               </div>

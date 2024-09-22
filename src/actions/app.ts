@@ -1,7 +1,7 @@
 "use server";
 
 import { db } from "@/db";
-import { appsTable, SelectApp } from "@/db/schema";
+import { appsTable, InsertApp, SelectApp } from "@/db/schema";
 import { auth } from "@clerk/nextjs/server";
 import { eq } from "drizzle-orm";
 
@@ -10,18 +10,15 @@ interface CreateAppSuccess extends SelectApp {
 }
 
 export const createApp = async ({
-  appName,
-  appId,
+  title: appName,
+  iosAppId,
   content,
   customScheme,
   packageName,
-}: {
-  appName: string;
-  content: string;
-  customScheme: string;
-  packageName: string;
-  appId: string;
-}): Promise<{ success: false; error: string } | CreateAppSuccess> => {
+  fallbackUrl,
+}: InsertApp): Promise<
+  { success: false; error: string } | CreateAppSuccess
+> => {
   const { userId } = auth();
 
   if (!userId) return { success: false, error: "User unauthorized" };
@@ -41,7 +38,8 @@ export const createApp = async ({
       customScheme,
       packageName,
       userId,
-      appId,
+      iosAppId,
+      fallbackUrl,
     })
     .returning();
 
@@ -55,15 +53,19 @@ interface UpdateAppSuccess extends SelectApp {
 export const updateAppById = async (
   appId: string,
   {
-    appName,
+    title: appName,
     content,
     customScheme,
     packageName,
+    iosAppId,
+    fallbackUrl,
   }: {
-    appName?: string;
+    title?: string;
     content?: string;
     customScheme?: string;
-    packageName?: string;
+    packageName?: string | null;
+    iosAppId?: string | null;
+    fallbackUrl?: string;
   }
 ): Promise<{ success: false; error: string } | UpdateAppSuccess> => {
   const { userId } = auth();
@@ -77,6 +79,8 @@ export const updateAppById = async (
   if (content !== undefined) updateData.content = content;
   if (customScheme !== undefined) updateData.customScheme = customScheme;
   if (packageName !== undefined) updateData.packageName = packageName;
+  if (iosAppId !== undefined) updateData.iosAppId = iosAppId;
+  if (fallbackUrl !== undefined) updateData.fallbackUrl = fallbackUrl;
 
   // Only proceed with the update if there are fields to update
   if (Object.keys(updateData).length > 0) {

@@ -16,34 +16,32 @@ import {
   Package,
   Smartphone,
 } from "lucide-react";
-import Header from "@/components/dashboard/Header";
+import Header from "./dashboard/Header";
 
 async function getAppDetails(appId: string) {
-  try {
-    const [app] = await db
-      .select()
-      .from(appsTable)
-      .where(eq(appsTable.id, appId));
+  const [app] = await db
+    .select()
+    .from(appsTable)
+    .where(eq(appsTable.id, appId));
 
-    if (!app) {
-      notFound();
-    }
-    return app;
-  } catch (error) {
-    console.log(error);
-    return null;
+  if (!app) {
+    notFound();
   }
+
+  return app;
 }
 
-export default async function Page({ params }: { params: { appId: string } }) {
+export default async function AppDetailsPage({
+  params,
+}: {
+  params: { id: string };
+}) {
   const { userId } = auth();
   if (!userId) {
     return null;
   }
 
-  const app = await getAppDetails(params.appId);
-
-  if (!app) return null;
+  const app = await getAppDetails(params.id);
 
   const previewUrl = `https://yourdomain.com/${app.title
     .toLowerCase()

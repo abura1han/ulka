@@ -1,101 +1,98 @@
-import Image from "next/image";
+import React from "react";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { ArrowRight, Smartphone, Globe, Link } from "lucide-react";
 
-export default function Home() {
+const HomePage = () => {
   return (
-    <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
-      <main className="flex flex-col gap-8 row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="https://nextjs.org/icons/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="list-inside list-decimal text-sm text-center sm:text-left font-[family-name:var(--font-geist-mono)]">
-          <li className="mb-2">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] px-1 py-0.5 rounded font-semibold">
-              src/app/page.tsx
-            </code>
-            .
-          </li>
-          <li>Save and see your changes instantly.</li>
-        </ol>
+    <div className="min-h-screen bg-gradient-to-b from-purple-600 to-indigo-700 text-white">
+      <header className="container mx-auto py-8">
+        <h1 className="text-4xl font-bold mb-2">Ulka</h1>
+        <p className="text-xl">The ultimate app deeplinking solution</p>
+      </header>
 
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="https://nextjs.org/icons/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Login to dashboard
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:min-w-44"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
-        </div>
+      <main className="container mx-auto py-12">
+        <section className="mb-16">
+          <h2 className="text-3xl font-semibold mb-6">
+            Seamless App Linking for Every Scenario
+          </h2>
+          <div className="grid md:grid-cols-3 gap-8">
+            <Card className="bg-white/10 backdrop-blur-lg border-none text-white">
+              <CardHeader>
+                <CardTitle className="flex items-center">
+                  <Smartphone className="mr-2" />
+                  Smart Routing
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                Create custom URLs that intelligently route users to your app or
+                app store.
+              </CardContent>
+            </Card>
+            <Card className="bg-white/10 backdrop-blur-lg border-none text-white">
+              <CardHeader>
+                <CardTitle className="flex items-center">
+                  <Globe className="mr-2" />
+                  Cross-Platform
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                Support for Android, iOS, and web fallback ensures a smooth
+                experience for all users.
+              </CardContent>
+            </Card>
+            <Card className="bg-white/10 backdrop-blur-lg border-none text-white">
+              <CardHeader>
+                <CardTitle className="flex items-center">
+                  <Link className="mr-2" />
+                  Easy Integration
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                Simple API and documentation make implementation a breeze for
+                developers.
+              </CardContent>
+            </Card>
+          </div>
+        </section>
+
+        <section className="text-center mb-16">
+          <h2 className="text-3xl font-semibold mb-6">How It Works</h2>
+          <div className="flex justify-center items-center space-x-4">
+            <div className="bg-white/20 rounded-full p-4">
+              <span className="text-2xl font-bold">1</span>
+            </div>
+            <ArrowRight />
+            <div className="bg-white/20 rounded-full p-4">
+              <span className="text-2xl font-bold">2</span>
+            </div>
+            <ArrowRight />
+            <div className="bg-white/20 rounded-full p-4">
+              <span className="text-2xl font-bold">3</span>
+            </div>
+          </div>
+          <div className="mt-4 space-y-2">
+            <p>Create a custom URL</p>
+            <p>User clicks the link</p>
+            <p>Ulka handles the magic, opening your app or fallback</p>
+          </div>
+        </section>
+
+        <section className="text-center">
+          <h2 className="text-3xl font-semibold mb-6">
+            Ready to Supercharge Your App Links?
+          </h2>
+          <Button className="bg-white text-purple-700 hover:bg-purple-100">
+            Get Started with Ulka
+          </Button>
+        </section>
       </main>
-      <footer className="row-start-3 flex gap-6 flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="https://nextjs.org/icons/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="https://nextjs.org/icons/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="https://nextjs.org/icons/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
+
+      <footer className="container mx-auto py-8 text-center">
+        <p>&copy; 2024 Ulka. Open-source and proud.</p>
       </footer>
     </div>
   );
-}
+};
+
+export default HomePage;

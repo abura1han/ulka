@@ -1,7 +1,7 @@
 {
   "version": "6",
   "dialect": "sqlite",
-  "id": "f7b8cbe7-3185-4bc3-ad7f-916aba046c79",
+  "id": "7ec7f772-917d-493a-81a1-7703cb9e451d",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "tables": {
     "analytics": {
@@ -13,7 +13,7 @@
           "primaryKey": true,
           "notNull": true,
           "autoincrement": false,
-          "default": "'f8f1615b-e75a-48a4-8028-32c2808b5e08'"
+          "default": "'0f62434b-6f59-4639-8545-d3ab6db24e4a'"
         },
         "app_id": {
           "name": "app_id",
@@ -73,7 +73,7 @@
           "primaryKey": true,
           "notNull": true,
           "autoincrement": false,
-          "default": "'61d30ae6-9c9b-4f49-8d19-a41863958883'"
+          "default": "'54ce997a-347a-45bd-bfa9-5590ae06d0d5'"
         },
         "app_id": {
           "name": "app_id",
@@ -133,7 +133,7 @@
           "primaryKey": true,
           "notNull": true,
           "autoincrement": false,
-          "default": "'965851d9-d291-42ee-aadb-09886bca6351'"
+          "default": "'fcb20ad4-4e20-4431-9315-9e1a7857ea38'"
         },
         "title": {
           "name": "title",
@@ -177,6 +177,13 @@
           "notNull": true,
           "autoincrement": false
         },
+        "fallback_url": {
+          "name": "fallback_url",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
         "created_at": {
           "name": "created_at",
           "type": "text",
@@ -207,7 +214,7 @@
           "primaryKey": true,
           "notNull": true,
           "autoincrement": false,
-          "default": "'ef4e2f04-6c40-488a-b151-1182389c8e8e'"
+          "default": "'e974ea0a-43fc-4211-b168-8264ac32d30b'"
         },
         "app_id": {
           "name": "app_id",

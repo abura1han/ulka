@@ -49,13 +49,13 @@ export default function RedirectPage() {
     if (!appQuery.data?.data) return;
     if (appQuery.data?.success === false) return;
 
-    const { packageName, appId } = appQuery.data.data;
+    const { packageName, iosAppId } = appQuery.data.data;
 
     if (redirectStep === 1) {
       // Redirect to app store after a delay
       const timer = setTimeout(() => {
         if (/iPhone|iPad|iPod/i.test(navigator.userAgent)) {
-          window.location.href = `https://apps.apple.com/app/id${appId}`;
+          window.location.href = `https://apps.apple.com/app/id${iosAppId}`;
         } else {
           window.location.href = `market://details?id=${packageName}`;
         }
@@ -90,12 +90,12 @@ export default function RedirectPage() {
   }, [redirectStep, appQuery.data, appQuery.isError, appQuery.isLoading]);
 
   const handleOpenWebsite = () => {
-    if (!appQuery.data) return;
     if (!appQuery.data?.success) return;
+    if (!appQuery.data?.data) return;
 
-    // const {fallbackUrl} = appQuery.data
+    const { fallbackUrl } = appQuery.data.data;
 
-    // window.location.href = fallbackUrl;
+    if (fallbackUrl) window.location.href = fallbackUrl;
   };
 
   if (appQuery.isLoading) {

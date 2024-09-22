@@ -7,9 +7,10 @@ export const appsTable = sqliteTable("apps", {
   title: text("title").notNull(),
   content: text("content").notNull(),
   userId: text("user_id").notNull(), // Clerk User ID
-  packageName: text("package_name").notNull(), // Android package name
-  appId: text("app_id"), // iOS App ID
+  packageName: text("package_name"), // Android package name
+  iosAppId: text("app_id"), // iOS App ID
   customScheme: text("custom_scheme").notNull(), // Custom URL scheme
+  fallbackUrl: text("fallback_url").notNull(), 
   createdAt: text("created_at")
     .default(sql`(CURRENT_TIMESTAMP)`)
     .notNull(),
