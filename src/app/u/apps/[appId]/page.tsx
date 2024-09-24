@@ -6,6 +6,8 @@ import { eq } from "drizzle-orm";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 
+import Header from "@/components/dashboard/Header";
+import QrCode from "@/components/QrCode";
 import { db } from "@/db";
 import { appsTable } from "@/db/schema";
 import {
@@ -16,7 +18,6 @@ import {
   Package,
   Smartphone,
 } from "lucide-react";
-import Header from "@/components/dashboard/Header";
 
 async function getAppDetails(appId: string) {
   try {
@@ -45,7 +46,7 @@ export default async function Page({ params }: { params: { appId: string } }) {
 
   if (!app) return null;
 
-  const previewUrl = `https://yourdomain.com/${app.title
+  const previewUrl = `https://ulka.dev/${app.title
     .toLowerCase()
     .replace(/\s+/g, "-")}`;
 
@@ -114,6 +115,15 @@ export default async function Page({ params }: { params: { appId: string } }) {
                         <LinkIcon className="mr-2 h-4 w-4" />
                         <span>Fallback: Opens {app.packageName}</span>
                       </div>
+                    </div>
+                  </CardContent>
+                </Card>
+
+                <h3 className="text-lg font-semibold my-2">QR code</h3>
+                <Card>
+                  <CardContent className="p-4 space-y-4">
+                    <div className="space-y-2">
+                      <QrCode value={previewUrl} />
                     </div>
                   </CardContent>
                 </Card>
