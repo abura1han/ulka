@@ -34,7 +34,6 @@ export default async function AppsDashboard() {
           <CardHeader className="flex flex-row items-center justify-between">
             <CardTitle>Your Apps</CardTitle>
             <Link href={"/u/apps/create"} className={cn(buttonVariants())}>
-              {" "}
               <Plus /> Create new app
             </Link>
           </CardHeader>

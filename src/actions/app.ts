@@ -4,6 +4,7 @@ import { db } from "@/db";
 import { appsTable, InsertApp, SelectApp } from "@/db/schema";
 import { auth } from "@clerk/nextjs/server";
 import { eq } from "drizzle-orm";
+import { revalidatePath } from "next/cache";
 
 interface CreateAppSuccess extends SelectApp {
   success: true;
@@ -42,6 +43,8 @@ export const createApp = async ({
       fallbackUrl,
     })
     .returning();
+
+  revalidatePath("/u/apps");
 
   return { success: true, ...app };
 };
@@ -106,6 +109,8 @@ export const updateAppById = async (
       return { success: false, error: "App not found" };
     }
 
+    revalidatePath("/u/apps");
+
     return { success: true, ...existingApp };
   }
 };
@@ -128,6 +133,31 @@ export const getAppDataById = async (appId: string): Promise<GetAppData> => {
     }
 
     return { success: true, data: appData };
+  } catch (error) {
+    console.log(error);
+
+    return { success: false, error: "Something went wrong" };
+  }
+};
+
+export const deleteAppDataById = async (appId: string): Promise<GetAppData> => {
+  try {
+    // Check if the app exists
+    const [appData] = await db
+      .select()
+      .from(appsTable)
+      .where(eq(appsTable.id, appId));
+
+    if (!appData) {
+      return { success: false, error: "App not found" };
+    }
+
+    // If the app exists, delete it
+    await db.delete(appsTable).where(eq(appsTable.id, appId));
+
+    revalidatePath("/u/apps");
+
+    return { success: true };
   } catch (error) {
     console.log(error);
 
