@@ -25,8 +25,6 @@ export default function RedirectPage() {
     queryFn: () => getAppDataById(params[0]),
   });
 
-  console.log(params);
-
   useEffect(() => {
     if (!appQuery.data?.success) return;
     if (!appQuery.data.data) return;
@@ -41,8 +39,6 @@ export default function RedirectPage() {
 
     return () => clearTimeout(timer);
   }, [appQuery.data?.success, appQuery.data?.data]);
-
-  console.log({ redirectStep });
 
   useEffect(() => {
     if (appQuery.isLoading || appQuery.isError) return;
@@ -77,12 +73,12 @@ export default function RedirectPage() {
     if (!appQuery.data?.data) return;
     if (appQuery.data?.success === false) return;
 
-    const customScheme = appQuery.data.data.customScheme;
+    const fallbackUrl = appQuery.data.data.fallbackUrl;
 
     if (redirectStep === 2) {
       // Redirect to fallback URL after a delay
       const timer = setTimeout(() => {
-        window.location.href = customScheme;
+        window.location.href = fallbackUrl;
       }, 2000);
 
       return () => clearTimeout(timer);

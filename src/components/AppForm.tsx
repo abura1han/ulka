@@ -1,6 +1,6 @@
 "use client";
 
-import { updateAppById } from "@/actions/app";
+import { createApp, updateAppById } from "@/actions/app";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import {
@@ -32,8 +32,9 @@ const formSchema = z.object({
   customScheme: z
     .string()
     .min(1, { message: "Custom scheme is required" })
-    .regex(/^[a-z][a-z0-9+.-]*:$/, {
-      message: "Custom scheme must start with a letter and end with a colon",
+    .regex(/^[a-z][a-z0-9+.-]*:\/\//, {
+      message:
+        "Custom scheme must start with a letter and end with forward double slashes",
     }),
   fallbackUrl: z.string().url({ message: "Invalid fallback URL" }),
 });
@@ -64,10 +65,15 @@ export default function AppForm({
   });
 
   const formMutation = useMutation({
-    mutationFn: (data: InsertApp) => updateAppById(appId, data),
+    mutationFn: (data: InsertApp) =>
+      operationMode === "update" ? updateAppById(appId, data) : createApp(data),
     onSuccess: () => {
-      toast.success("App updated successfully");
-      router.push("/apps");
+      toast.success(
+        operationMode === "update"
+          ? "App updated successfully"
+          : "App created successfully"
+      );
+      router.push("/u/apps");
     },
     onError: (error) => {
       toast.error("Failed to update app", { description: error.message });
