@@ -22,9 +22,15 @@ const HomePage = () => {
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-purple-600 to-indigo-700 text-white">
-      <header className="container mx-auto py-8 flex justify-between items-center">
+      <header className="container mx-auto py-8 px-4 lg:px-0 flex justify-between items-center">
         <div>
-          <h1 className="text-4xl font-bold mb-2">Ulka</h1>
+          {/* <h1 className="text-4xl font-bold mb-2">Ulka</h1> */}
+          <Image
+            width={150}
+            height={51}
+            src={"/images/logo-light.svg"}
+            alt="Ulka"
+          />
           <p className="text-xl">The ultimate app deeplinking solution</p>
         </div>
         <nav className="flex items-center gap-x-3">
@@ -43,7 +49,7 @@ const HomePage = () => {
         </nav>
       </header>
 
-      <main className="container mx-auto py-12">
+      <main className="container mx-auto py-12 px-4 lg:px-0 ">
         <section className="mb-16">
           <div className="grid md:grid-cols-2 gap-8 items-center">
             <div>
@@ -59,7 +65,7 @@ const HomePage = () => {
                 Get Started with Ulka
               </Button>
             </div>
-            <div className="bg-white/10 backdrop-blur-lg rounded-lg p-4 h-[400px]">
+            <div className="bg-white/10 backdrop-blur-lg rounded-lg p-4 h-[400px] max-w-[80vw] lg:max-w-[auto]">
               <Slider {...sliderSettings} adaptiveHeight>
                 <div className="relative">
                   <Image

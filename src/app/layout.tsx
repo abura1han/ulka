@@ -19,6 +19,18 @@ const geistMono = localFont({
 export const metadata: Metadata = {
   title: "Ulka",
   description: "Platform for developers by developers",
+  abstract: "The ultimate app deep linking solution",
+  applicationName: "Ulka",
+  authors: [{ name: "Abu Raihan", url: "https://github.com/abura1han" }],
+  category: "Deep linking",
+  keywords: ["Deep link", "Deep linking", "Share link", "Open app"],
+  openGraph: {
+    type: "website",
+    title: "Ulka - The ultimate app deep linking solution",
+    description: "The ultimate app deep linking solution",
+    siteName: "ulka",
+    images: [{ url: "/images/og.jpg" }],
+  },
 };
 
 export default function RootLayout({

@@ -87,7 +87,7 @@ const PricingPage = () => {
         </p>
       </header>
 
-      <main className="container mx-auto py-12">
+      <main className="container mx-auto py-12 px-4 lg:px-0">
         <div className="grid md:grid-cols-3 gap-8">
           {tiers.map((tier, index) => (
             <Card
