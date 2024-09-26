@@ -54,6 +54,10 @@ export default function RedirectPage() {
           window.location.href = `https://apps.apple.com/app/id${iosAppId}`;
         } else {
           window.location.href = `market://details?id=${packageName}`;
+
+          setTimeout(() => {
+            window.location.href = `https://play.google.com/store/apps/details?id=${packageName}`;
+          }, 200);
         }
         setRedirectStep(2);
       }, 2000);
