@@ -34,24 +34,61 @@ const Header = () => {
   };
 
   return (
-    <header className="flex items-center justify-between px-4 py-2 shadow-md h-[62px]">
-      <Logo />
-      {isSignedIn && (
-        <>
-          <div className="flex items-center space-x-4">
-            {/* Profile Avatar with Dropdown */}
-            {isLoaded ? (
-              <UserButton />
-            ) : (
-              <div>
-                <Loader2 />
-              </div>
-            )}
-          </div>
-        </>
-      )}
+    <header className="flex items-center h-[72px] border-b">
+      <div className="flex items-center justify-between px-4 py-2 w-full max-w-[1200px] mx-auto">
+        <div className="flex items-center gap-x-8">
+          <Logo />
+          {/* <BreadcrumbWithDropdown /> */}
+        </div>
+
+        {isSignedIn && (
+          <>
+            <div className="flex items-center space-x-4">
+              {/* Profile Avatar with Dropdown */}
+              {isLoaded ? (
+                <UserButton />
+              ) : (
+                <div>
+                  <Loader2 />
+                </div>
+              )}
+            </div>
+          </>
+        )}
+      </div>
     </header>
   );
 };
 
 export default Header;
+
+// function BreadcrumbWithDropdown() {
+//   return (
+//     <Breadcrumb>
+//       <BreadcrumbList>
+//         <BreadcrumbSeparator>
+//           <Slash />
+//         </BreadcrumbSeparator>
+//         <BreadcrumbItem>
+//           <DropdownMenu>
+//             <DropdownMenuTrigger className="flex items-center gap-1">
+//               Components
+//               <ChevronDown className="h-4 w-4" />
+//             </DropdownMenuTrigger>
+//             <DropdownMenuContent align="start">
+//               <DropdownMenuItem>Documentation</DropdownMenuItem>
+//               <DropdownMenuItem>Themes</DropdownMenuItem>
+//               <DropdownMenuItem>GitHub</DropdownMenuItem>
+//             </DropdownMenuContent>
+//           </DropdownMenu>
+//         </BreadcrumbItem>
+//         <BreadcrumbSeparator>
+//           <Slash />
+//         </BreadcrumbSeparator>
+//         <BreadcrumbItem>
+//           <BreadcrumbPage>Breadcrumb</BreadcrumbPage>
+//         </BreadcrumbItem>
+//       </BreadcrumbList>
+//     </Breadcrumb>
+//   );
+// }

@@ -52,7 +52,8 @@ export default function RedirectPage() {
       const timer = setTimeout(() => {
         if (/iPhone|iPad|iPod/i.test(navigator.userAgent)) {
           window.location.href = `https://apps.apple.com/app/id${iosAppId}`;
-        } else {
+        } else if (/Android/i.test(navigator.userAgent)) {
+          // If it's an Android device
           window.location.href = `market://details?id=${packageName}`;
 
           setTimeout(() => {
@@ -121,7 +122,7 @@ export default function RedirectPage() {
     <div className="container mx-auto p-4 max-w-md">
       <Card>
         <CardHeader>
-          <CardTitle>Opening {appQuery.data.data?.title}</CardTitle>
+          <CardTitle>Opening {appQuery.data.data?.name}</CardTitle>
           <CardDescription>
             Please wait while we redirect you...
           </CardDescription>

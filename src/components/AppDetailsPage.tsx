@@ -43,7 +43,7 @@ export default async function AppDetailsPage({
 
   const app = await getAppDetails(params.id);
 
-  const previewUrl = `https://yourdomain.com/${app.title
+  const previewUrl = `https://yourdomain.com/${app.name
     .toLowerCase()
     .replace(/\s+/g, "-")}`;
 
@@ -54,7 +54,7 @@ export default async function AppDetailsPage({
       <main className="container mx-auto px-4 py-8">
         <Card className="mb-8">
           <CardHeader className="flex flex-row items-center justify-between">
-            <CardTitle>{app.title}</CardTitle>
+            <CardTitle>{app.name}</CardTitle>
             <Button asChild>
               <Link href={`/u/apps/${app.id}/edit`}>
                 <Edit className="mr-2 h-4 w-4" />
@@ -100,7 +100,7 @@ export default async function AppDetailsPage({
                       <div className="flex items-center">
                         <Smartphone className="mr-2 h-4 w-4" />
                         <span>
-                          If installed: Opens {app.title} using{" "}
+                          If installed: Opens {app.name} using{" "}
                           {app.customScheme}
                         </span>
                       </div>
@@ -117,14 +117,6 @@ export default async function AppDetailsPage({
                 </Card>
               </div>
             </div>
-            {app.content && (
-              <div>
-                <h3 className="text-lg font-semibold mb-2">
-                  Additional Content
-                </h3>
-                <p>{app.content}</p>
-              </div>
-            )}
           </CardContent>
         </Card>
       </main>

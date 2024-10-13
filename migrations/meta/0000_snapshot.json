@@ -1,7 +1,7 @@
 {
   "version": "6",
   "dialect": "sqlite",
-  "id": "7ec7f772-917d-493a-81a1-7703cb9e451d",
+  "id": "3951c46c-5d34-4459-ba1a-b8246ef713c6",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "tables": {
     "analytics": {
@@ -9,11 +9,10 @@
       "columns": {
         "id": {
           "name": "id",
-          "type": "text(191)",
+          "type": "text(36)",
           "primaryKey": true,
           "notNull": true,
-          "autoincrement": false,
-          "default": "'0f62434b-6f59-4639-8545-d3ab6db24e4a'"
+          "autoincrement": false
         },
         "app_id": {
           "name": "app_id",
@@ -64,88 +63,13 @@
       "compositePrimaryKeys": {},
       "uniqueConstraints": {}
     },
-    "app_store_urls": {
-      "name": "app_store_urls",
-      "columns": {
-        "id": {
-          "name": "id",
-          "type": "text(191)",
-          "primaryKey": true,
-          "notNull": true,
-          "autoincrement": false,
-          "default": "'54ce997a-347a-45bd-bfa9-5590ae06d0d5'"
-        },
-        "app_id": {
-          "name": "app_id",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
-        },
-        "platform": {
-          "name": "platform",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
-        },
-        "store_url": {
-          "name": "store_url",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
-        },
-        "created_at": {
-          "name": "created_at",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false,
-          "default": "(CURRENT_TIMESTAMP)"
-        }
-      },
-      "indexes": {},
-      "foreignKeys": {
-        "app_store_urls_app_id_apps_id_fk": {
-          "name": "app_store_urls_app_id_apps_id_fk",
-          "tableFrom": "app_store_urls",
-          "tableTo": "apps",
-          "columnsFrom": [
-            "app_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
-          "onDelete": "cascade",
-          "onUpdate": "no action"
-        }
-      },
-      "compositePrimaryKeys": {},
-      "uniqueConstraints": {}
-    },
     "apps": {
       "name": "apps",
       "columns": {
         "id": {
           "name": "id",
-          "type": "text(191)",
+          "type": "text(36)",
           "primaryKey": true,
-          "notNull": true,
-          "autoincrement": false,
-          "default": "'fcb20ad4-4e20-4431-9315-9e1a7857ea38'"
-        },
-        "title": {
-          "name": "title",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
-        },
-        "content": {
-          "name": "content",
-          "type": "text",
-          "primaryKey": false,
           "notNull": true,
           "autoincrement": false
         },
@@ -156,15 +80,29 @@
           "notNull": true,
           "autoincrement": false
         },
-        "package_name": {
-          "name": "package_name",
+        "app_name": {
+          "name": "app_name",
           "type": "text",
           "primaryKey": false,
           "notNull": true,
           "autoincrement": false
         },
-        "app_id": {
-          "name": "app_id",
+        "logo_url": {
+          "name": "logo_url",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "package_name": {
+          "name": "package_name",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "ios_app_id": {
+          "name": "ios_app_id",
           "type": "text",
           "primaryKey": false,
           "notNull": false,
@@ -181,7 +119,7 @@
           "name": "fallback_url",
           "type": "text",
           "primaryKey": false,
-          "notNull": false,
+          "notNull": true,
           "autoincrement": false
         },
         "created_at": {
@@ -194,90 +132,15 @@
         },
         "updated_at": {
           "name": "updated_at",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": false,
-          "autoincrement": false
-        }
-      },
-      "indexes": {},
-      "foreignKeys": {},
-      "compositePrimaryKeys": {},
-      "uniqueConstraints": {}
-    },
-    "redirect_settings": {
-      "name": "redirect_settings",
-      "columns": {
-        "id": {
-          "name": "id",
-          "type": "text(191)",
-          "primaryKey": true,
-          "notNull": true,
-          "autoincrement": false,
-          "default": "'e974ea0a-43fc-4211-b168-8264ac32d30b'"
-        },
-        "app_id": {
-          "name": "app_id",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
-        },
-        "fallback_url": {
-          "name": "fallback_url",
           "type": "text",
           "primaryKey": false,
           "notNull": false,
-          "autoincrement": false
-        },
-        "deep_link_data": {
-          "name": "deep_link_data",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": false,
-          "autoincrement": false
-        },
-        "tracking_enabled": {
-          "name": "tracking_enabled",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": false,
-          "autoincrement": false,
-          "default": true
-        },
-        "timeout": {
-          "name": "timeout",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": false,
-          "autoincrement": false,
-          "default": 5
-        },
-        "created_at": {
-          "name": "created_at",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": true,
           "autoincrement": false,
           "default": "(CURRENT_TIMESTAMP)"
         }
       },
       "indexes": {},
-      "foreignKeys": {
-        "redirect_settings_app_id_apps_id_fk": {
-          "name": "redirect_settings_app_id_apps_id_fk",
-          "tableFrom": "redirect_settings",
-          "tableTo": "apps",
-          "columnsFrom": [
-            "app_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
-          "onDelete": "cascade",
-          "onUpdate": "no action"
-        }
-      },
+      "foreignKeys": {},
       "compositePrimaryKeys": {},
       "uniqueConstraints": {}
     }

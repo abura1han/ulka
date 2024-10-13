@@ -1,8 +1,11 @@
+import { ourFileRouter } from "@/app/api/uploadthing/core";
 import ReactQueryProvider from "@/components/ReactQueryProvider";
 import { Toaster } from "@/components/ui/sonner";
 import { ClerkProvider } from "@clerk/nextjs";
+import { NextSSRPlugin } from "@uploadthing/react/next-ssr-plugin";
 import type { Metadata } from "next";
 import localFont from "next/font/local";
+import { extractRouterConfig } from "uploadthing/server";
 import "./globals.css";
 
 const geistSans = localFont({
@@ -44,6 +47,9 @@ export default function RootLayout({
         <body
           className={`${geistSans.variable} ${geistMono.variable} antialiased`}
         >
+          <NextSSRPlugin
+            routerConfig={extractRouterConfig(ourFileRouter)}
+          />
           <ReactQueryProvider>{children}</ReactQueryProvider>
           <Toaster />
         </body>

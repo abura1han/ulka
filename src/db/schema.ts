@@ -1,60 +1,44 @@
 import { sql } from "drizzle-orm";
-import { integer, sqliteTable, text } from "drizzle-orm/sqlite-core";
+import { sqliteTable, text } from "drizzle-orm/sqlite-core";
 
 // Apps Table
 export const appsTable = sqliteTable("apps", {
-  id: text("id", { length: 191 }).primaryKey().default(crypto.randomUUID()),
-  title: text("title").notNull(),
-  content: text("content").notNull(),
-  userId: text("user_id").notNull(), // Clerk User ID
-  packageName: text("package_name"), // Android package name
-  iosAppId: text("app_id"), // iOS App ID
-  customScheme: text("custom_scheme").notNull(), // Custom URL scheme
-  fallbackUrl: text("fallback_url").notNull(), 
-  createdAt: text("created_at")
-    .default(sql`(CURRENT_TIMESTAMP)`)
-    .notNull(),
-  updateAt: integer("updated_at", { mode: "timestamp" }).$onUpdate(
-    () => new Date()
-  ),
-});
+  id: text("id", { length: 36 })
+    .primaryKey()
+    .$defaultFn(() => crypto.randomUUID()),
 
-// App Store URLs Table
-export const appStoreUrlsTable = sqliteTable("app_store_urls", {
-  id: text("id", { length: 191 }).primaryKey().default(crypto.randomUUID()),
-  appId: text("app_id")
-    .notNull()
-    .references(() => appsTable.id, { onDelete: "cascade" }),
-  platform: text("platform").notNull(), // 'android', 'ios', or 'third-party'
-  storeUrl: text("store_url").notNull(), // App store or third-party store URL
-  createdAt: text("created_at")
-    .default(sql`(CURRENT_TIMESTAMP)`)
-    .notNull(),
-});
+  // User data
+  userId: text("user_id").notNull(),
 
-// Redirect Settings Table
-export const redirectSettingsTable = sqliteTable("redirect_settings", {
-  id: text("id", { length: 191 }).primaryKey().default(crypto.randomUUID()),
-  appId: text("app_id")
-    .notNull()
-    .references(() => appsTable.id, { onDelete: "cascade" }),
-  fallbackUrl: text("fallback_url"), // URL to redirect to if app is not installed
-  deepLinkData: text("deep_link_data"), // Data passed into the deep link
-  trackingEnabled: integer("tracking_enabled", { mode: "boolean" }).default(
-    true
-  ), // Enable/Disable tracking
-  timeout: integer("timeout").default(5), // Timeout in seconds before redirecting to fallback
+  // Company data
+  name: text("app_name").notNull(),
+  logo: text("logo_url").notNull(),
+
+  // Linking data
+  packageName: text("package_name"),
+  iosAppId: text("ios_app_id"),
+  customScheme: text("custom_scheme").notNull(),
+  fallbackUrl: text("fallback_url").notNull(),
+
+  // Time stamp
   createdAt: text("created_at")
     .default(sql`(CURRENT_TIMESTAMP)`)
     .notNull(),
+  updateAt: text("updated_at")
+    .default(sql`(CURRENT_TIMESTAMP)`)
+    .$onUpdate(() => sql`CURRENT_TIMESTAMP`),
 });
 
 // Tracking and Analytics Table
 export const analyticsTable = sqliteTable("analytics", {
-  id: text("id", { length: 191 }).primaryKey().default(crypto.randomUUID()),
+  id: text("id", { length: 36 })
+    .primaryKey()
+    .$defaultFn(() => crypto.randomUUID()),
+
   appId: text("app_id")
     .notNull()
     .references(() => appsTable.id, { onDelete: "cascade" }),
+
   eventType: text("event_type").notNull(), // 'click', 'install', 'open'
   source: text("source"), // Optional UTM parameters or source info
   timestamp: text("timestamp")
@@ -64,12 +48,6 @@ export const analyticsTable = sqliteTable("analytics", {
 
 export type InsertApp = typeof appsTable.$inferInsert;
 export type SelectApp = typeof appsTable.$inferSelect;
-
-export type InsertAppStoreUrl = typeof appStoreUrlsTable.$inferInsert;
-export type SelectAppStoreUrl = typeof appStoreUrlsTable.$inferSelect;
-
-export type InsertRedirectSetting = typeof redirectSettingsTable.$inferInsert;
-export type SelectRedirectSetting = typeof redirectSettingsTable.$inferSelect;
 
 export type InsertAnalytics = typeof analyticsTable.$inferInsert;
 export type SelectAnalytics = typeof analyticsTable.$inferSelect;

@@ -1,9 +1,10 @@
 import React from "react";
-import { Button } from "@/components/ui/button";
+import { Button, buttonVariants } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Check, X } from "lucide-react";
+import Link from "next/link";
 
-const PricingPage = () => {
+const PricingSection = () => {
   const tiers = [
     {
       name: "Free",
@@ -26,7 +27,7 @@ const PricingPage = () => {
     },
     {
       name: "Pro",
-      price: "$49",
+      price: "$Cheap",
       period: "per month",
       features: [
         "50,000 monthly link clicks",
@@ -79,7 +80,7 @@ const PricingPage = () => {
   );
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-purple-600 to-indigo-700 text-white">
+    <div className="min-h-screen bg-gradient-to-b from-purple-600 to-indigo-700 text-white rounded-lg lg:px-6">
       <header className="container mx-auto py-8 text-center">
         <h1 className="text-4xl font-bold mb-2">Ulka Pricing</h1>
         <p className="text-xl">
@@ -112,9 +113,25 @@ const PricingPage = () => {
                     <FeatureItem key={i} text={feature} included={false} />
                   ))}
                 </ul>
-                <Button className="w-full bg-white text-purple-700 hover:bg-purple-100">
-                  {tier.name === "Enterprise" ? "Contact Sales" : "Get Started"}
-                </Button>
+                {tier.name === "Free" ? (
+                  <Link
+                    href={"/u/apps"}
+                    className={buttonVariants({
+                      className:
+                        "w-full bg-white text-purple-700 hover:bg-purple-100",
+                    })}
+                  >
+                    Get Started
+                  </Link>
+                ) : (
+                  <Button className="w-full bg-white text-purple-700 hover:bg-purple-100">
+                    {tier.name === "Pro"
+                      ? "Coming soon"
+                      : tier.name === "Enterprise"
+                      ? "Contact Sales"
+                      : "Get Started"}
+                  </Button>
+                )}
               </CardContent>
             </Card>
           ))}
@@ -173,4 +190,4 @@ const PricingPage = () => {
   );
 };
 
-export default PricingPage;
+export default PricingSection;

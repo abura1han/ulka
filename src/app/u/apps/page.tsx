@@ -14,6 +14,7 @@ import { appsTable } from "@/db/schema";
 import { cn } from "@/lib/utils";
 import { auth } from "@clerk/nextjs/server";
 import { Calendar, LinkIcon, Package, Plus, Smartphone } from "lucide-react";
+import Image from "next/image";
 import Link from "next/link";
 
 export default async function AppsDashboard() {
@@ -29,7 +30,7 @@ export default async function AppsDashboard() {
     <div className="min-h-screen bg-background">
       <Header />
 
-      <main className="container mx-auto px-4 py-8">
+      <main className="container max-w-[1200px] mx-auto px-4 py-8">
         <Card className="mb-8">
           <CardHeader className="flex flex-row items-center justify-between">
             <CardTitle>Your Apps</CardTitle>
@@ -51,7 +52,20 @@ export default async function AppsDashboard() {
               <TableBody>
                 {apps.map((app) => (
                   <TableRow key={app.id}>
-                    <TableCell className="font-medium">{app.title}</TableCell>
+                    <TableCell className="font-medium flex items-center gap-x-1">
+                      {!!app.logo ? (
+                        <Image
+                          src={app.logo}
+                          width={30}
+                          height={30}
+                          alt={app.name}
+                          className="size-7 rounded-lg"
+                        />
+                      ) : (
+                        <div className="size-7 rounded-lg bg-lime-500"></div>
+                      )}
+                      <span>{app.name}</span>
+                    </TableCell>
                     <TableCell>
                       <div className="flex items-center">
                         <Package className="mr-2 h-4 w-4" />

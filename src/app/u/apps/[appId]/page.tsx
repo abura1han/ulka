@@ -1,24 +1,17 @@
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Separator } from "@/components/ui/separator";
 import { auth } from "@clerk/nextjs/server";
 import { eq } from "drizzle-orm";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 
+import AppDeleteButton from "@/components/AppDeleteButton";
 import Header from "@/components/dashboard/Header";
-import QrCode from "@/components/QrCode";
+import DeeplinkDataPreview from "@/components/DeeplinkDataPreview";
 import { db } from "@/db";
 import { appsTable } from "@/db/schema";
-import {
-  Calendar,
-  Edit,
-  ExternalLink,
-  Link as LinkIcon,
-  Package,
-  Smartphone,
-} from "lucide-react";
-import AppDeleteButton from "@/components/AppDeleteButton";
+import { Calendar, Edit, Package, Smartphone } from "lucide-react";
+import Image from "next/image";
 
 async function getAppDetails(appId: string) {
   try {
@@ -47,18 +40,25 @@ export default async function Page({ params }: { params: { appId: string } }) {
 
   if (!app) return null;
 
-  const previewUrl = `https://ulka.dev/${app.title
-    .toLowerCase()
-    .replace(/\s+/g, "-")}`;
-
   return (
     <div className="min-h-screen bg-background">
       <Header />
 
-      <main className="container mx-auto px-4 py-8">
+      <main className="container max-w-[1200px] mx-auto px-4 py-8">
         <Card className="mb-8">
           <CardHeader className="flex flex-row items-center justify-between">
-            <CardTitle>{app.title}</CardTitle>
+            <CardTitle className="flex items-center gap-x-2">
+              {!!app.logo && (
+                <Image
+                  src={app.logo}
+                  width={40}
+                  height={40}
+                  alt={app.name}
+                  className="rounded-full size-10"
+                />
+              )}
+              <span>{app.name}</span>
+            </CardTitle>
             <div className="flex items-center gap-x-4">
               <Button asChild>
                 <Link href={`/u/apps/${app.id}/edit`}>
@@ -93,54 +93,13 @@ export default async function Page({ params }: { params: { appId: string } }) {
                   </div>
                 </div>
               </div>
-              <div>
-                <h3 className="text-lg font-semibold mb-2">Preview</h3>
-                <Card>
-                  <CardContent className="p-4 space-y-4">
-                    <div className="flex items-center">
-                      <LinkIcon className="mr-2 h-4 w-4" />
-                      <span className="font-medium">Deep Link URL:</span>
-                      <span className="ml-2 text-blue-500">{previewUrl}</span>
-                    </div>
-                    <Separator />
-                    <div className="space-y-2">
-                      <div className="flex items-center">
-                        <Smartphone className="mr-2 h-4 w-4" />
-                        <span>
-                          If installed: Opens {app.title} using{" "}
-                          {app.customScheme}
-                        </span>
-                      </div>
-                      <div className="flex items-center">
-                        <ExternalLink className="mr-2 h-4 w-4" />
-                        <span>If not installed: Redirects to app store</span>
-                      </div>
-                      <div className="flex items-center">
-                        <LinkIcon className="mr-2 h-4 w-4" />
-                        <span>Fallback: Opens {app.packageName}</span>
-                      </div>
-                    </div>
-                  </CardContent>
-                </Card>
-
-                <h3 className="text-lg font-semibold my-2">QR code</h3>
-                <Card>
-                  <CardContent className="p-4 space-y-4">
-                    <div className="space-y-2">
-                      <QrCode value={previewUrl} />
-                    </div>
-                  </CardContent>
-                </Card>
-              </div>
+              <DeeplinkDataPreview
+                appId={app.id}
+                appName={app.name}
+                customScheme={app.customScheme}
+                packageName={app.packageName || undefined}
+              />
             </div>
-            {app.content && (
-              <div>
-                <h3 className="text-lg font-semibold mb-2">
-                  Additional Content
-                </h3>
-                <p>{app.content}</p>
-              </div>
-            )}
           </CardContent>
         </Card>
       </main>
