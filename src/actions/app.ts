@@ -162,7 +162,7 @@ const uploadToS3 = async (file: File, userId: string): Promise<string> => {
 
   try {
     await s3Client.send(command);
-    return `<YOUR_CDN_URL>/${fileKey}`;
+    return `${process.env.IMAGE_CDN_URL}/${fileKey}`;
   } catch (error) {
     console.error("S3 upload error:", error);
     throw new Error("S3 upload failed");

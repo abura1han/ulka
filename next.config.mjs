@@ -4,7 +4,7 @@ const nextConfig = {
     remotePatterns: [
       {
         protocol: "https",
-        hostname: "YOUR_CDN_HOST_NAME",
+        hostname: process.env.IMAGE_CDN_URL.replace('https://', ''),
         port: "",
         pathname: "/**",
       },
