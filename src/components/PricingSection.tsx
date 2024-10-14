@@ -1,192 +1,108 @@
-import React from "react";
-import { Button, buttonVariants } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Check, X } from "lucide-react";
-import Link from "next/link";
+import { Check } from "lucide-react";
+
+const tiers = [
+  {
+    name: "Free",
+    price: "$0",
+    features: [
+      "1,000 monthly clicks",
+      "Basic analytics",
+      "Community support",
+      "Android & iOS support",
+      "Web fallback",
+    ],
+  },
+  {
+    name: "Pro",
+    price: "$29",
+    period: "per month",
+    features: [
+      "50,000 monthly clicks",
+      "Advanced analytics",
+      "Priority email support",
+      "Custom domains",
+      "API access",
+      "Team collaboration (up to 5 members)",
+    ],
+  },
+  {
+    name: "Enterprise",
+    price: "Custom",
+    features: [
+      "Unlimited clicks",
+      "Advanced analytics with custom reports",
+      "24/7 priority support",
+      "Multiple custom domains",
+      "Full API access",
+      "White-labeling",
+      "Dedicated account manager",
+      "Custom integration support",
+    ],
+  },
+];
+
+// PlanCard component for reusability
+const PlanCard = ({
+  name,
+  price,
+  period,
+  features,
+  isEnterprise,
+}: {
+  name: string;
+  price: string;
+  period?: string;
+  features: string[];
+  isEnterprise: boolean;
+}) => {
+  return (
+    <div className="bg-gray-50 p-8 rounded-lg shadow-lg text-center flex flex-col justify-between">
+      <h3 className="text-2xl font-bold mb-2">{name}</h3>
+      <div className="text-4xl font-bold mb-1">{price}</div>
+      {period && <div className="text-sm text-gray-500 mb-4">{period}</div>}
+      <ul className="mb-6 space-y-3 text-left">
+        {features.map((feature, index) => (
+          <li key={index} className="flex items-center">
+            <Check className="w-5 h-5 mr-2 text-green-500" aria-hidden="true" />
+            <span className="text-gray-600">{feature}</span>
+          </li>
+        ))}
+      </ul>
+      <button
+        className="w-full bg-blue-600 text-white hover:bg-blue-700 py-3 rounded-md transition-colors duration-300"
+        aria-label={isEnterprise ? "Contact Sales" : `Get Started with ${name}`}
+      >
+        {name === "Pro"
+          ? "Coming soon"
+          : isEnterprise
+          ? "Coming soon"
+          : "Get Started"}
+      </button>
+    </div>
+  );
+};
 
 const PricingSection = () => {
-  const tiers = [
-    {
-      name: "Free",
-      price: "$0",
-      period: "forever",
-      features: [
-        "1,000 monthly link clicks",
-        "Basic analytics",
-        "Android & iOS support",
-        "Web fallback",
-        "Community support",
-      ],
-      notIncluded: [
-        "Custom domains",
-        "Advanced analytics",
-        "Priority support",
-        "API access",
-        "White-labeling",
-      ],
-    },
-    {
-      name: "Pro",
-      price: "$Cheap",
-      period: "per month",
-      features: [
-        "50,000 monthly link clicks",
-        "Advanced analytics",
-        "Android & iOS support",
-        "Web fallback",
-        "Custom domains",
-        "API access",
-        "Priority email support",
-        "Team collaboration (up to 5 members)",
-      ],
-      notIncluded: ["White-labeling", "Unlimited team members"],
-    },
-    {
-      name: "Enterprise",
-      price: "Custom",
-      period: "contact us",
-      features: [
-        "Unlimited monthly link clicks",
-        "Advanced analytics with custom reports",
-        "Android & iOS support",
-        "Web fallback",
-        "Multiple custom domains",
-        "Full API access",
-        "24/7 priority support",
-        "White-labeling",
-        "Unlimited team members",
-        "Dedicated account manager",
-        "Custom integration support",
-      ],
-      notIncluded: [],
-    },
-  ];
-
-  const FeatureItem = ({
-    text,
-    included,
-  }: {
-    text: string;
-    included: boolean;
-  }) => (
-    <li className="flex items-center space-x-2">
-      {included ? (
-        <Check className="text-green-500" />
-      ) : (
-        <X className="text-red-500" />
-      )}
-      <span>{text}</span>
-    </li>
-  );
-
   return (
-    <div className="min-h-screen bg-gradient-to-b from-purple-600 to-indigo-700 text-white rounded-lg lg:px-6">
-      <header className="container mx-auto py-8 text-center">
-        <h1 className="text-4xl font-bold mb-2">Ulka Pricing</h1>
-        <p className="text-xl">
-          Choose the perfect plan for your deeplinking needs
-        </p>
-      </header>
-
-      <main className="container mx-auto py-12 px-4 lg:px-0">
-        <div className="grid md:grid-cols-3 gap-8">
-          {tiers.map((tier, index) => (
-            <Card
+    <section id="pricing" className="py-20 bg-white">
+      <div className="container mx-auto px-4">
+        <h2 className="text-3xl md:text-4xl font-semibold mb-12 text-center text-gray-800">
+          Transparent Pricing for Every Need
+        </h2>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-5xl mx-auto">
+          {tiers.map((plan, index) => (
+            <PlanCard
               key={index}
-              className="bg-white/10 backdrop-blur-lg border-none text-white"
-            >
-              <CardHeader>
-                <CardTitle className="text-2xl font-bold">
-                  {tier.name}
-                </CardTitle>
-                <div className="mt-4">
-                  <span className="text-4xl font-bold">{tier.price}</span>
-                  <span className="text-sm ml-2">/ {tier.period}</span>
-                </div>
-              </CardHeader>
-              <CardContent>
-                <ul className="space-y-2 mb-6">
-                  {tier.features.map((feature, i) => (
-                    <FeatureItem key={i} text={feature} included={true} />
-                  ))}
-                  {tier.notIncluded.map((feature, i) => (
-                    <FeatureItem key={i} text={feature} included={false} />
-                  ))}
-                </ul>
-                {tier.name === "Free" ? (
-                  <Link
-                    href={"/u/apps"}
-                    className={buttonVariants({
-                      className:
-                        "w-full bg-white text-purple-700 hover:bg-purple-100",
-                    })}
-                  >
-                    Get Started
-                  </Link>
-                ) : (
-                  <Button className="w-full bg-white text-purple-700 hover:bg-purple-100">
-                    {tier.name === "Pro"
-                      ? "Coming soon"
-                      : tier.name === "Enterprise"
-                      ? "Contact Sales"
-                      : "Get Started"}
-                  </Button>
-                )}
-              </CardContent>
-            </Card>
+              name={plan.name}
+              price={plan.price}
+              period={plan.period}
+              features={plan.features}
+              isEnterprise={plan.name === "Enterprise"}
+            />
           ))}
         </div>
-
-        <section className="mt-16 text-center">
-          <h2 className="text-3xl font-semibold mb-6">
-            Frequently Asked Questions
-          </h2>
-          <div className="grid md:grid-cols-2 gap-8">
-            <div>
-              <h3 className="text-xl font-semibold mb-2">
-                What happens if I exceed my monthly clicks?
-              </h3>
-              <p>
-                We won{"'"}t cut you off. Your links will continue to work, but
-                we{"'"}ll reach out to discuss upgrading your plan.
-              </p>
-            </div>
-            <div>
-              <h3 className="text-xl font-semibold mb-2">
-                Can I switch plans at any time?
-              </h3>
-              <p>
-                Yes, you can upgrade, downgrade, or cancel your plan at any
-                time. Changes take effect at the start of the next billing
-                cycle.
-              </p>
-            </div>
-            <div>
-              <h3 className="text-xl font-semibold mb-2">
-                Do you offer a free trial of the Pro plan?
-              </h3>
-              <p>
-                Yes, we offer a 14-day free trial of the Pro plan. No credit
-                card required to start.
-              </p>
-            </div>
-            <div>
-              <h3 className="text-xl font-semibold mb-2">
-                What kind of support do you offer?
-              </h3>
-              <p>
-                Free users get community support. Pro users receive priority
-                email support. Enterprise clients enjoy 24/7 dedicated support.
-              </p>
-            </div>
-          </div>
-        </section>
-      </main>
-
-      <footer className="container mx-auto py-8 text-center">
-        <p>&copy; 2024 Ulka. All rights reserved.</p>
-      </footer>
-    </div>
+      </div>
+    </section>
   );
 };
 
