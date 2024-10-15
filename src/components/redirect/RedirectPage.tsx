@@ -12,6 +12,7 @@ import {
 import { Progress } from "@/components/ui/progress";
 import { useQuery } from "@tanstack/react-query";
 import { Download, ExternalLink, Loader2, Smartphone } from "lucide-react";
+import Image from "next/image";
 import { useParams } from "next/navigation";
 import { useEffect, useState } from "react";
 
@@ -122,7 +123,18 @@ export default function RedirectPage() {
     <div className="container mx-auto p-4 max-w-md">
       <Card>
         <CardHeader>
-          <CardTitle>Opening {appQuery.data.data?.name}</CardTitle>
+          <CardTitle className="flex flex-row items-center">
+            {appQuery.data.data?.logo && (
+              <Image
+                src={appQuery.data.data?.logo}
+                width={50}
+                height={50}
+                alt=""
+                className="rounded-lg mr-3"
+              />
+            )}{" "}
+            {appQuery.data.data?.name}
+          </CardTitle>
           <CardDescription>
             Please wait while we redirect you...
           </CardDescription>

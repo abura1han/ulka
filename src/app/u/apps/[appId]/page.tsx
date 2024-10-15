@@ -45,60 +45,83 @@ export default async function Page({ params }: { params: { appId: string } }) {
       <Header />
 
       <main className="container max-w-[1200px] mx-auto px-4 py-8">
-        <Card className="mb-8">
+        <Card className="mb-8 shadow-lg rounded-lg">
           <CardHeader className="flex flex-row items-center justify-between">
-            <CardTitle className="flex items-center gap-x-2">
+            <CardTitle className="flex items-center gap-x-3">
               {!!app.logo && (
                 <Image
                   src={app.logo}
-                  width={40}
-                  height={40}
+                  width={50}
+                  height={50}
                   alt={app.name}
-                  className="rounded-full size-10"
+                  className="rounded-lg shadow-md size-14"
                 />
               )}
-              <span>{app.name}</span>
+              <span className="text-xl font-semibold text-gray-800">
+                {app.name}
+              </span>
             </CardTitle>
-            <div className="flex items-center gap-x-4">
-              <Button asChild>
-                <Link href={`/u/apps/${app.id}/edit`}>
-                  <Edit className="mr-2 h-4 w-4" />
-                  Edit App
+            <div className="flex items-center gap-x-3">
+              <Button asChild className="hover:opacity-80 transition-opacity">
+                <Link
+                  href={`/u/apps/${app.id}/edit`}
+                  className="flex items-center"
+                >
+                  <Edit className="mr-2 h-4 w-4 text-gray-600" />
+                  Edit
                 </Link>
               </Button>
               <AppDeleteButton appId={params.appId} />
             </div>
           </CardHeader>
-          <CardContent className="space-y-4">
-            <div className="grid grid-cols-2 gap-4">
+          <CardContent className="space-y-6">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+              {/* App Details Section */}
               <div>
-                <h3 className="text-lg font-semibold mb-2">App Details</h3>
-                <div className="space-y-2">
+                <h3 className="text-lg font-bold text-gray-700 mb-4">
+                  App Information
+                </h3>
+                <div className="space-y-3">
                   <div className="flex items-center">
-                    <Package className="mr-2 h-4 w-4" />
-                    <span className="font-medium">Package Name:</span>
-                    <span className="ml-2">{app.packageName}</span>
+                    <Package className="mr-2 h-4 w-4 text-gray-500" />
+                    <span className="font-medium text-gray-600">
+                      Package Name:
+                    </span>
+                    <span className="ml-2 text-gray-700">
+                      {app.packageName}
+                    </span>
                   </div>
                   <div className="flex items-center">
-                    <Smartphone className="mr-2 h-4 w-4" />
-                    <span className="font-medium">Custom Scheme:</span>
-                    <span className="ml-2">{app.customScheme}</span>
+                    <Smartphone className="mr-2 h-4 w-4 text-gray-500" />
+                    <span className="font-medium text-gray-600">
+                      Custom Scheme:
+                    </span>
+                    <span className="ml-2 text-gray-700">
+                      {app.customScheme}
+                    </span>
                   </div>
                   <div className="flex items-center">
-                    <Calendar className="mr-2 h-4 w-4" />
-                    <span className="font-medium">Created At:</span>
-                    <span className="ml-2">
+                    <Calendar className="mr-2 h-4 w-4 text-gray-500" />
+                    <span className="font-medium text-gray-600">Created:</span>
+                    <span className="ml-2 text-gray-700">
                       {new Date(app.createdAt).toLocaleString()}
                     </span>
                   </div>
                 </div>
               </div>
-              <DeeplinkDataPreview
-                appId={app.id}
-                appName={app.name}
-                customScheme={app.customScheme}
-                packageName={app.packageName || undefined}
-              />
+
+              {/* Deeplink Data Section */}
+              <div className="bg-gray-50 p-4 rounded-lg shadow-md">
+                <h3 className="text-lg font-bold text-gray-700 mb-4">
+                  Deeplink Preview
+                </h3>
+                <DeeplinkDataPreview
+                  appId={app.id}
+                  appName={app.name}
+                  customScheme={app.customScheme}
+                  fallbackUrl={app.fallbackUrl || undefined}
+                />
+              </div>
             </div>
           </CardContent>
         </Card>

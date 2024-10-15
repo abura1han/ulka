@@ -13,7 +13,7 @@ const HeroSection = () => {
           across platforms with intelligent deeplinking.
         </p>
         <Link
-          href="/signup"
+          href="/u/apps"
           className="inline-block font-medium bg-white text-blue-600 hover:bg-gray-100 text-lg px-8 py-4 rounded-full shadow-lg transition-all duration-300 transform hover:scale-105"
         >
           Get Started for Free

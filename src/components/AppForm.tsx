@@ -155,20 +155,21 @@ export default function AppForm({
   }, [form.watch]);
 
   return (
-    <div className="flex gap-8 container max-w-[1200px] mx-auto mt-10">
+    <div className="flex gap-10 container max-w-[1200px] mx-auto mt-12">
+      {/* Form Section */}
       <div className="w-1/2">
         <Form {...form}>
-          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
             <FormField
               control={form.control}
               name="logo"
               render={() => (
                 <FormItem>
-                  <FormLabel>App Logo *</FormLabel>
+                  <FormLabel>App Logo</FormLabel>
                   <FormControl>
                     <div
                       {...getRootProps()}
-                      className={`border-2 border-dashed rounded-lg p-4 text-center cursor-pointer ${
+                      className={`border-2 border-dashed rounded-lg p-5 text-center cursor-pointer transition-colors ${
                         isDragActive ? "border-primary" : "border-gray-300"
                       }`}
                     >
@@ -178,41 +179,48 @@ export default function AppForm({
                           <Image
                             src={form.watch("logo")}
                             alt="Logo preview"
-                            width={100}
-                            height={100}
-                            className="mb-2"
+                            width={80}
+                            height={80}
+                            className="mb-3 rounded-lg shadow-sm"
                           />
-                          <p>Click or drag to replace</p>
+                          <p className="text-gray-600">
+                            Click or drag to replace
+                          </p>
                         </div>
                       ) : (
                         <div className="flex flex-col items-center">
-                          <Upload className="w-12 h-12 text-gray-400 mb-2" />
-                          <p>Click or drag logo here</p>
+                          <Upload className="w-12 h-12 text-gray-400 mb-3" />
+                          <p className="text-gray-600">
+                            Click or drag logo here
+                          </p>
                         </div>
                       )}
                     </div>
                   </FormControl>
                   <FormDescription>
-                    Accepted formats: JPEG, PNG, WebP. Max size: 1MB.
+                    Supported formats: JPEG, PNG, WebP. Max size: 1MB.
                   </FormDescription>
                   <FormMessage />
                 </FormItem>
               )}
             />
+
+            {/* App Name */}
             <FormField
               control={form.control}
               name="name"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>App name *</FormLabel>
+                  <FormLabel>App Name *</FormLabel>
                   <FormControl>
-                    <Input placeholder="ex. Ulka gallery" {...field} />
+                    <Input placeholder="e.g., Ulka Gallery" {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
               )}
             />
 
+            {/* Package Name */}
             <FormField
               control={form.control}
               name="packageName"
@@ -221,19 +229,20 @@ export default function AppForm({
                   <FormLabel>Package Name</FormLabel>
                   <FormControl>
                     <Input
-                      placeholder="com.example.app"
                       {...field}
+                      placeholder="com.example.app"
                       value={field.value || ""}
                     />
                   </FormControl>
                   <FormDescription>
-                    The unique identifier for your Android app
+                    Unique Android package identifier.
                   </FormDescription>
                   <FormMessage />
                 </FormItem>
               )}
             />
 
+            {/* iOS App ID */}
             <FormField
               control={form.control}
               name="iosAppId"
@@ -242,19 +251,20 @@ export default function AppForm({
                   <FormLabel>iOS App ID</FormLabel>
                   <FormControl>
                     <Input
-                      placeholder="123456789"
                       {...field}
+                      placeholder="123456789"
                       value={field.value || ""}
                     />
                   </FormControl>
                   <FormDescription>
-                    The App Store ID for your iOS app (if applicable)
+                    Your app{"'"}s App Store ID (if applicable).
                   </FormDescription>
                   <FormMessage />
                 </FormItem>
               )}
             />
 
+            {/* Custom Scheme */}
             <FormField
               control={form.control}
               name="customScheme"
@@ -265,13 +275,14 @@ export default function AppForm({
                     <Input placeholder="yourapp://" {...field} />
                   </FormControl>
                   <FormDescription>
-                    The deep linking scheme for your app (e.g., yourapp://)
+                    The deep link scheme (e.g., yourapp://).
                   </FormDescription>
                   <FormMessage />
                 </FormItem>
               )}
             />
 
+            {/* Fallback URL */}
             <FormField
               control={form.control}
               name="fallbackUrl"
@@ -282,16 +293,17 @@ export default function AppForm({
                     <Input placeholder="https://yourapp.com" {...field} />
                   </FormControl>
                   <FormDescription>
-                    The website to open if the app isn{"'"}t installed
+                    Website to open if the app is not installed.
                   </FormDescription>
                   <FormMessage />
                 </FormItem>
               )}
             />
 
+            {/* Submit Button */}
             <Button
               type="submit"
-              className="w-full"
+              className="w-full bg-primary text-white py-3 rounded-md hover:bg-primary-dark transition"
               disabled={formMutation.isPending}
             >
               {operationMode === "create"
@@ -305,42 +317,49 @@ export default function AppForm({
           </form>
         </Form>
       </div>
+
+      {/* Preview Section */}
       <div className="w-1/2">
-        <Card>
-          <CardHeader>
-            <CardTitle>Deep Link Preview</CardTitle>
+        <Card className="shadow-lg rounded-lg">
+          <CardHeader className="bg-gray-50 p-4 rounded-t-lg">
+            <CardTitle className="text-lg font-semibold">
+              Deep Link Preview
+            </CardTitle>
           </CardHeader>
-          <CardContent>
+          <CardContent className="p-6">
+            {/* Logo and App Name */}
             <div className="flex items-center mb-4">
               {previewData?.logo && (
                 <Image
-                  // src={form.watch("logo")}
                   src={previewData?.logo}
                   alt="App Logo"
                   width={50}
                   height={50}
-                  className="mr-4 rounded-lg"
+                  className="mr-4 rounded-lg shadow-sm"
                 />
               )}
-              <h3 className="text-lg font-semibold">
+              <h3 className="text-lg font-semibold text-gray-700">
                 {previewData?.name || "Your App"}
               </h3>
             </div>
-            <p className="mb-4">
-              Your deep link:{" "}
-              <code className="bg-gray-100 p-1 rounded">
+
+            {/* Deep Link Information */}
+            <p className="mb-4 text-sm">
+              Deep link:{" "}
+              <code className="bg-gray-100 p-2 rounded">
                 {typeof window !== "undefined" && window.location.origin}/
                 {(previewData?.name || "your-app")
                   .toLowerCase()
                   .replace(/\s+/g, "-")}
               </code>
             </p>
-            <div className="space-y-4">
+
+            {/* Deep Link Behaviors */}
+            <div className="space-y-3 text-sm">
               <div className="flex items-center">
                 <Smartphone className="mr-2" />
                 <span>
-                  If app is installed: Opens {previewData?.name || "Your App"}{" "}
-                  using{" "}
+                  Opens {previewData?.name || "Your App"} using{" "}
                   <code className="bg-gray-100 p-1 rounded">
                     {previewData?.customScheme || "yourapp://"}
                   </code>
@@ -348,7 +367,7 @@ export default function AppForm({
               </div>
               <div className="flex items-center">
                 <Download className="mr-2" />
-                <span>If app is not installed: Redirects to app store</span>
+                <span>Redirects to app store if app is not installed:</span>
                 <ul className="list-disc list-inside ml-4">
                   <li>
                     Android:{" "}

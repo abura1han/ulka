@@ -1,4 +1,4 @@
-"use client"
+"use client";
 
 import { ExternalLink, LinkIcon, Smartphone } from "lucide-react";
 import QrCode from "./QrCode";
@@ -10,12 +10,12 @@ const DeeplinkDataPreview = ({
   appId,
   appName,
   customScheme,
-  packageName,
+  fallbackUrl,
 }: {
   appId: string;
   appName: string;
-  packageName?: string;
   customScheme?: string;
+  fallbackUrl?: string;
 }) => {
   const [previewUrl, setPreviewUrl] = useState<string>("");
 
@@ -47,7 +47,7 @@ const DeeplinkDataPreview = ({
             </div>
             <div className="flex items-center">
               <LinkIcon className="mr-2 h-4 w-4" />
-              <span>Fallback: Opens {packageName}</span>
+              <span>Fallback: Opens {fallbackUrl}</span>
             </div>
           </div>
         </CardContent>

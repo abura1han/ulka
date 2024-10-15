@@ -1,11 +1,14 @@
 import { sql } from "drizzle-orm";
 import { sqliteTable, text } from "drizzle-orm/sqlite-core";
+import ShortUniqueId from "short-unique-id";
+
+const { randomUUID } = new ShortUniqueId({ length: 10 });
 
 // Apps Table
 export const appsTable = sqliteTable("apps", {
   id: text("id", { length: 36 })
     .primaryKey()
-    .$defaultFn(() => crypto.randomUUID()),
+    .$defaultFn(() => randomUUID()),
 
   // User data
   userId: text("user_id").notNull(),

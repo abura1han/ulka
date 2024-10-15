@@ -31,63 +31,78 @@ export default async function AppsDashboard() {
       <Header />
 
       <main className="container max-w-[1200px] mx-auto px-4 py-8">
-        <Card className="mb-8">
+        <Card className="mb-8 shadow-lg rounded-lg">
           <CardHeader className="flex flex-row items-center justify-between">
-            <CardTitle>Your Apps</CardTitle>
-            <Link href={"/u/apps/create"} className={cn(buttonVariants())}>
-              <Plus /> Create new app
+            <CardTitle className="text-xl font-bold text-gray-800">
+              Your Apps
+            </CardTitle>
+            <Link
+              href={"/u/apps/create"}
+              className={cn(
+                buttonVariants(),
+                "hover:bg-gray-200 transition-colors"
+              )}
+            >
+              <Plus className="mr-2" /> Create new app
             </Link>
           </CardHeader>
           <CardContent>
-            <Table>
+            <Table className="border-separate border-spacing-y-3">
               <TableHeader>
-                <TableRow>
-                  <TableHead>App Name</TableHead>
-                  <TableHead>Package Name</TableHead>
-                  <TableHead>Custom Scheme</TableHead>
-                  <TableHead>Created At</TableHead>
-                  <TableHead>Actions</TableHead>
+                <TableRow className="text-gray-600">
+                  <TableHead className="text-left">App Name</TableHead>
+                  <TableHead className="text-left">Package Name</TableHead>
+                  <TableHead className="text-left">Custom Scheme</TableHead>
+                  <TableHead className="text-left">Created At</TableHead>
+                  <TableHead className="text-left">Actions</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
                 {apps.map((app) => (
-                  <TableRow key={app.id}>
-                    <TableCell className="font-medium flex items-center gap-x-1">
+                  <TableRow
+                    key={app.id}
+                    className="bg-white hover:bg-gray-50 transition-shadow shadow-sm rounded-lg hover:shadow-md"
+                  >
+                    <TableCell className="font-medium flex items-center gap-x-2 py-4">
                       {!!app.logo ? (
                         <Image
                           src={app.logo}
                           width={30}
                           height={30}
                           alt={app.name}
-                          className="size-7 rounded-lg"
+                          className="size-7 rounded-lg shadow-md"
                         />
                       ) : (
-                        <div className="size-7 rounded-lg bg-lime-500"></div>
+                        <div className="size-7 rounded-lg bg-lime-500 shadow-md"></div>
                       )}
-                      <span>{app.name}</span>
+                      <span className="text-gray-800">{app.name}</span>
                     </TableCell>
-                    <TableCell>
-                      <div className="flex items-center">
-                        <Package className="mr-2 h-4 w-4" />
+                    <TableCell className="py-4">
+                      <div className="flex items-center text-gray-700">
+                        <Package className="mr-2 h-4 w-4 text-gray-500" />
                         {app.packageName}
                       </div>
                     </TableCell>
-                    <TableCell>
-                      <div className="flex items-center">
-                        <Smartphone className="mr-2 h-4 w-4" />
+                    <TableCell className="py-4">
+                      <div className="flex items-center text-gray-700">
+                        <Smartphone className="mr-2 h-4 w-4 text-gray-500" />
                         {app.customScheme}
                       </div>
                     </TableCell>
-                    <TableCell>
-                      <div className="flex items-center">
-                        <Calendar className="mr-2 h-4 w-4" />
+                    <TableCell className="py-4">
+                      <div className="flex items-center text-gray-700">
+                        <Calendar className="mr-2 h-4 w-4 text-gray-500" />
                         {new Date(app.createdAt).toLocaleDateString()}
                       </div>
                     </TableCell>
-                    <TableCell>
-                      <Button asChild variant="ghost">
+                    <TableCell className="py-4">
+                      <Button
+                        asChild
+                        variant="ghost"
+                        className="hover:opacity-80 transition-opacity"
+                      >
                         <Link href={`/u/apps/${app.id}`}>
-                          <LinkIcon className="mr-2 h-4 w-4" />
+                          <LinkIcon className="mr-2 h-4 w-4 text-gray-600" />
                           Details
                         </Link>
                       </Button>

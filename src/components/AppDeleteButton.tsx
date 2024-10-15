@@ -45,6 +45,7 @@ const AppDeleteButton = ({ appId }: { appId: string }) => {
           <DropdownMenuSeparator />
           <DropdownMenuGroup>
             <DropdownMenuItem
+              className="hover:opacity-80 transition-opacity"
               disabled={deleteMutation.isPending}
               onClick={async () => {
                 await deleteMutation.mutateAsync();
